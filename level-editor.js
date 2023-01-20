@@ -4,7 +4,7 @@
 
 //For localhost vs github version
 
-let isProd = false;
+let isProd = true;
 
 let rootUrl;
 let imagePresetsFolder;
