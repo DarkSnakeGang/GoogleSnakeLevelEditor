@@ -268,17 +268,26 @@ let customPresetManager = {
         this.currentBoardWidth = boardWidth;
         this.currentBoardHeight = boardHeight;
 
+        let newSizeSetting = null;
+
         if(boardWidth === 10 && boardHeight === 9) {
           this.currentMapSize = 'small';
+          newSizeSetting = 1;
         } else if(boardWidth === 17 && boardHeight === 15) {
           this.currentMapSize = 'standard';
+          newSizeSetting = 0;
         } else if(boardWidth === 24 && boardHeight === 21) {
           this.currentMapSize = 'large';
+          newSizeSetting = 2;
         } else {
-          //Maybe they are trying to do a custom board size? Just do nothing here for now.
+          //Maybe they are trying to do a custom board size? Just keep map size the same for now.
+          newSizeSetting = null;
         }
 
         document.getElementById('custom-map-size').value = this.currentMapSize;
+
+        //Also change real map size
+        selectNewSizeSettingAndHardReset(newSizeSetting);
       }
     } catch (err) {
       //Just skip and keep current map size.
@@ -857,8 +866,8 @@ function setupMakePatternHtml() {
   modIndicator.style='position:absolute;font-family:roboto;color:white;font-size:14px;padding-top:4px;padding-left:30px;user-select: none;';
   modIndicator.textContent = 'Level Editor Mod';
 
-  let canvasNode = document.getElementsByClassName('jNB0Ic')[0]
-  document.getElementsByClassName('EjCLSb yZz3de')[0].insertBefore(modIndicator, canvasNode);
+  let canvasNode = document.getElementsByClassName('jNB0Ic')[0];
+  document.getElementsByClassName('EjCLSb')[0].insertBefore(modIndicator, canvasNode);
 
   let visiblePanel = 'place';//"place" or "preset" - indicates whether to show the panel for placing individual fruit or preset patterns
   //Add html
