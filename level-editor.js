@@ -29,8 +29,6 @@ if(isProd) {
 }
 
 //Used by make pattern
-var wholeSnakeObject;//Set to the big snake object that includes everything in snake.
-var megaWholeSnakeObject;//Contains wholeSnakeObject
 let gameCanvasElMakePattern = document.getElementsByClassName('cer0Bd')[0];
 let roundApplePos = true;//For placing apples with mousedown
 let mousePlaceMode = {category: 'box', type:-1};//Category could be apple, wall, drag or box, type corresponds to which apple

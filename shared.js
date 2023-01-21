@@ -2,6 +2,9 @@
 
 window.commonHasAlreadyRun = window.commonHasAlreadyRun || false;
 
+var wholeSnakeObject;//Set to the big snake object that includes everything in snake.
+var megaWholeSnakeObject;//Contains wholeSnakeObject
+
 window.snake.runMod = function(processCodeCallback){
   const scripts = document.body.getElementsByTagName('script');
   for(let script of scripts) {
