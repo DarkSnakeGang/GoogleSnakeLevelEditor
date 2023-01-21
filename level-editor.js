@@ -1296,7 +1296,10 @@ function checkPatternInBounds(pixelList) {
 }
 
 function loadShared() {
-  req = new XMLHttpRequest(); req.open('GET', sharedUrl); req.onload = function() { (1,eval)(this.responseText); }; req.send();
+  req = new XMLHttpRequest();
+  req.open('GET', sharedUrl, false);//Note that this has to be a synchronous request as we run main mod code immediately after.
+  req.onload = function() {(1,eval)(this.responseText);};
+  req.send();
 }
 
 //Load/run common code. This should be done manually if in Dev
