@@ -4,7 +4,7 @@
 ![Screenshot 2](https://user-images.githubusercontent.com/69080709/213930901-8076193a-eed3-4b52-8ac7-b75dab9e8e35.png)
 
 
-Features:
+### Features:
 - Place Fruit/Walls/Sokoban Boxes directly onto the board with your mouse.
 - Play premade levels from the presets panel
 - Make your own custom presets from the custom presets panel
@@ -12,7 +12,7 @@ Features:
 - Challenge Mode. Play a series of 20 increasingly difficult snake levels
 - Random Ham Mode. Play random always winnable wall small patterns (Ham stands for Hamiltonian cycle).
 
-How to install:
+### How to install:
 1. Download the bookmark file in [releases](https://github.com/DarkSnakeGang/GoogleSnakeLevelEditor/releases/latest)
 2. Import the bookmark into your browser (see https://gyazo.com/736585ad892bba86cf5fdb0996d4937f )
 3. Start playing google snake
