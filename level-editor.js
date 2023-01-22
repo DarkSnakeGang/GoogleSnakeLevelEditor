@@ -4,7 +4,7 @@
 
 //For localhost vs github version
 
-let isProd = true;
+const isProd = true;
 
 let rootUrl;
 let imagePresetsFolder;
@@ -33,7 +33,7 @@ let gameCanvasElMakePattern = document.getElementsByClassName('cer0Bd')[0];
 let roundApplePos = true;//For placing apples with mousedown
 let mousePlaceMode = {category: 'box', type:-1};//Category could be apple, wall, drag or box, type corresponds to which apple
 let disableWallMode = true;//Whether wall mode should place walls every 2 turns
-let disableAppleInitialSpeed = true;
+let disableAppleInitialSpeed = false;
 let customSnakeStart = {isActive:false, x:4, y:1};
 let customPresetManager = {
   canvasWidth:370,
@@ -78,8 +78,8 @@ let customPresetManager = {
     selectNewSizeSettingAndHardReset(newSizeSetting);
   },
   draw: function() {
-    let tileWidth = this.canvasWidth/this.currentBoardWidth;
-    let tileHeight = this.canvasHeight/this.currentBoardHeight;
+    const tileWidth = this.canvasWidth/this.currentBoardWidth;
+    const tileHeight = this.canvasHeight/this.currentBoardHeight;
 
     this.ctx.fillStyle = "#a2d149";
     this.ctx.fillRect(0,0,this.canvasWidth,this.canvasHeight);
@@ -161,10 +161,10 @@ let customPresetManager = {
     //Try to place entity corresponding to current brush into the pixelList.
     
     //Convert pixels coords into board coords
-    let tileWidth = this.canvasWidth/this.currentBoardWidth;
-    let tileHeight = this.canvasHeight/this.currentBoardHeight;
-    let boardXCoord = Math.floor(xPixelCoord/tileWidth);
-    let boardYCoord = Math.floor(yPixelCoord/tileHeight);
+    const tileWidth = this.canvasWidth/this.currentBoardWidth;
+    const tileHeight = this.canvasHeight/this.currentBoardHeight;
+    const boardXCoord = Math.floor(xPixelCoord/tileWidth);
+    const boardYCoord = Math.floor(yPixelCoord/tileHeight);
 
     //Exit early if the mouse is still on the same square
     if(this.lastSpotDrawnOn.x === boardXCoord && this.lastSpotDrawnOn.y === boardYCoord) return;
@@ -373,7 +373,7 @@ let otherPresetmanager = {
     if(!this.isHamsLoaded) return [];
 
     //Choose random level
-    let chosenLevelCode = this.hamLevelCodes[Math.floor(Math.random() * this.hamLevelCodes.length)];
+    const chosenLevelCode = this.hamLevelCodes[Math.floor(Math.random() * this.hamLevelCodes.length)];
 
     //Get pixelList
     let hamPixelList = customPresetManager.getPixelListFromLevelCode(chosenLevelCode);
@@ -410,7 +410,7 @@ let otherPresetmanager = {
   getChallengePixelList: function() {
     if(!this.isChallengeLoaded) return [];
 
-    let chosenLevelCode = this.challengeLevelCodes[this.challengelevel - 1];
+    const chosenLevelCode = this.challengeLevelCodes[this.challengelevel - 1];
 
     //Get pixelList
     let challengePixelList = customPresetManager.getPixelListFromLevelCode(chosenLevelCode);
@@ -757,7 +757,7 @@ function hexToPixelDetails(hex) {
   hex = hex.toUpperCase();
 
   //Value gives the category, if it's not found then this is assumed to be "apple"
-  let hexToCategory = {
+  const hexToCategory = {
     '#578A34': 'wall',//Wall
     '#F0A036': 'box',//Boxes from sokoban, color is slight off average, but good enough imo
     '#4673E8': 'snakehead'//Start Position of the snake
@@ -772,7 +772,7 @@ function hexToPixelDetails(hex) {
   }
 
   //Index gives the type, if it isn't found then it would be -1 corresponding to no apple
-  let hexToTypeMapping = [
+  const hexToTypeMapping = [
     '#E05826',//Apple
     '#DABC1F',//Banana
     '#C5830E',//Pineapple
@@ -830,9 +830,9 @@ function rgbToHex(r, g, b) {
 
 function placeAppleAtMouse(event) {
   let canvasRect = gameCanvasElMakePattern.getBoundingClientRect();
-  let offsetFromBorder = {x:26,y:26};
+  const offsetFromBorder = {x:26,y:26};
   if(wholeSnakeObject && tileWidth && placeApple && placeWall && placeSokobox) {
-    let calculatedTileWidth = eval(`wholeSnakeObject.${tileWidth}`);
+    const calculatedTileWidth = eval(`wholeSnakeObject.${tileWidth}`);
     mouseX = event.clientX - canvasRect.left - offsetFromBorder.x - calculatedTileWidth/2;
     mouseY = event.clientY - canvasRect.top - offsetFromBorder.y - calculatedTileWidth/2;
     gameCoordX = mouseX / calculatedTileWidth;
@@ -871,8 +871,8 @@ function setupMakePatternHtml() {
 
   let visiblePanel = 'place';//"place" or "preset" - indicates whether to show the panel for placing individual fruit or preset patterns
   //Add html
-  let style = "position: absolute; left:100%;z-index:1001";
-  let presetImages = [
+  const style = "position: absolute; left:100%;z-index:1001";
+  const presetImages = [
     `${imagePresetsFolder}ez_loop.png`,
     `${imagePresetsFolder}straight_line.png`,
     `${imagePresetsFolder}rooms.png`,
@@ -890,7 +890,7 @@ function setupMakePatternHtml() {
     `${imagePresetsFolder}maze_beta.png`,
   ];
 
-  let htmlToInsert = `
+  const htmlToInsert = `
   <div id="place-panel" style="height: 600px; width: 200px; background-color: #bfde80; display: grid; grid-template-columns: 60px 60px 60px; justify-content: space-evenly;box-sizing: border-box; border: 10px solid #507f30;">
     <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="/logos/fnbx/snake_arcade/v13/trophy_01.png" data-type="-1" data-category="wall">
     <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(0%)" draggable="false" src="/logos/fnbx/snake_arcade/v13/trophy_09.png" data-type="-1" data-category="box">
@@ -928,7 +928,7 @@ function setupMakePatternHtml() {
   </div>
   `;
 
-  let customPresetHtmlToInsert = `
+  const customPresetHtmlToInsert = `
     <div id="custom-panel" style="height: 600px; width: 390px; background-color: rgb(191, 222, 128); display: none;box-sizing: border-box; border: 10px solid rgb(80, 127, 48);">
     <div style="padding:10px;font-family:'Roboto'">
       <p style="font-size: 1.17em;">Use the editor below to make your own starting pattern. Left click to place an entity, right click to erase.</p>
@@ -984,7 +984,7 @@ function setupMakePatternHtml() {
     </div>
   `;
 
-  let exportModal = `
+  const exportModal = `
   <div id="custom-export-dialogue" style="display: block;margin:50px auto;padding:10px;border:1px solid black;height: 320px; width:316.4px; background-color:beige;border-radius:5px">
     <p>Copy the text below and save it somewhere.</p>
     <textarea id="custom-export-textarea" rows="15" cols="40"></textarea>
@@ -1153,14 +1153,14 @@ function setupMakePatternHtml() {
   });
 
   document.getElementById('custom-import').addEventListener('click',()=>{
-    let levelCode = prompt('Paste in the level code below')
+    const levelCode = prompt('Paste in the level code below')
     if(levelCode) {
       customPresetManager.importCode(levelCode);
     }
   });
 
   document.getElementById('custom-export').addEventListener('click',()=>{
-    let levelCode = customPresetManager.getExportCode();
+    const levelCode = customPresetManager.getExportCode();
 
     document.getElementById('custom-export-textarea').value = levelCode;
 
@@ -1221,7 +1221,7 @@ function setupMakePatternHtml() {
   });
 
   //Set up CSS
-  let css = `.chosen-preset {
+  const css = `.chosen-preset {
     outline: 3px solid yellow;
     z-index: 1;
   }`;
@@ -1241,7 +1241,7 @@ function initialiseCanvas() {
 
 //Used so we can adjust where to spawn apples based on where the default spawn point is so that we can instead spawn stuff relative to top left
 function getAppleSpawnPointOffset() {
-  let boardWidth = eval(`wholeSnakeObject.${boardDimensions}.width`);
+  const boardWidth = eval(`wholeSnakeObject.${boardDimensions}.width`);
   switch(boardWidth) {
     case 17:
       return {x:-12,y:-7};
@@ -1294,10 +1294,10 @@ function selectNewSizeSettingAndHardReset(newSizeSetting) {
 }
 
 function checkPatternInBounds(pixelList) {
-  let boardWidth = eval(`wholeSnakeObject.${boardDimensions}.width`);
-  let boardHeight = eval(`wholeSnakeObject.${boardDimensions}.height`);
+  const boardWidth = eval(`wholeSnakeObject.${boardDimensions}.width`);
+  const boardHeight = eval(`wholeSnakeObject.${boardDimensions}.height`);
 
-  let hasStuffOutOfBounds = pixelList.some(p => p.x < 0 || p.y < 0 || p.x > boardWidth - 1 || p.y > boardHeight - 1);
+  const hasStuffOutOfBounds = pixelList.some(p => p.x < 0 || p.y < 0 || p.x > boardWidth - 1 || p.y > boardHeight - 1);
 
   return !hasStuffOutOfBounds;
 }
