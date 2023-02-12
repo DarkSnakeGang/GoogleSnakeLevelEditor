@@ -1187,9 +1187,6 @@ window.levelEditorMod.alterSnakeCode = function(code) {
 
   //Board dimensions - found in wholeSnakeObject, has width, height properties
   window.boardDimensions = code.match(/x===Math.floor\([a-z]\.[$a-zA-Z0-9_]{0,6}\.([$a-zA-Z0-9_]{0,6}\.[$a-zA-Z0-9_]{0,6})\.width\/2\)&&/)[1];
-  
-  //Contains reset and tick etc.
-  window.mainClass = code.match(/([$a-zA-Z0-9_]{0,6})=function\(a,b,c\){this\.settings=[a-z];this\.menu=[a-z];this\.header=[a-z];/)[1];
 
   //Set snakeGlobalObject every reset
   let funcWithReset, funcWithResetOrig;
