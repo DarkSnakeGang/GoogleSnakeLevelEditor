@@ -76,6 +76,7 @@ window.levelEditorMod.runCodeBefore = function() {
   window.disableWallMode = true;//Whether wall mode should place walls every 2 turns
   window.disableAppleInitialSpeed = false;
   window.customSnakeStart = {isActive:false, x:4, y:1};
+  window.hasShownWarnings = {wall: false, sokoban: false};//Whether we have shown the warning about walls/boxes not having collisions without the right mode selected.
   window.customPresetManager = {
     canvasWidth:370,
     canvasHeight:340,
@@ -1188,6 +1189,9 @@ window.levelEditorMod.alterSnakeCode = function(code) {
   //Board dimensions - found in wholeSnakeObject, has width, height properties
   window.boardDimensions = code.match(/x===Math.floor\([a-z]\.[$a-zA-Z0-9_]{0,6}\.([$a-zA-Z0-9_]{0,6}\.[$a-zA-Z0-9_]{0,6})\.width\/2\)&&/)[1];
 
+  //Checks whether we are playing a specific mode e.g. VK(this.settings,2) is true if we are playing portal
+  let modeCheck = code.match(/([$a-zA-Z0-9_]{0,6})\(this\.settings,6\)/)[1];
+
   //Set snakeGlobalObject every reset
   let funcWithReset, funcWithResetOrig;
   funcWithReset = funcWithResetOrig = findFunctionInCode(code, /[$a-zA-Z0-9_]{0,6}\.reset=function\(\)$/,
@@ -1248,6 +1252,11 @@ window.levelEditorMod.alterSnakeCode = function(code) {
   //Make a function to place a wall
   code = appendCodeWithinSnakeModule(code, `
   window.placeWall = function(x, y, banNeighbourSpawning = false) {
+    if(!${modeCheck}(wholeSnakeObject.settings, 1) && !window.hasShownWarnings.wall) {
+      alert("You must use wall mode for this to work, otherwise you will travel straight through walls. Use blender mode if you want to include other settings. We won't show this message again.");
+      window.hasShownWarnings.wall = true;
+    }
+
     x = Math.round(x);
     y = Math.round(y);
     let wallCoord = new ${coordConstructor}(x, y);
@@ -1303,6 +1312,11 @@ window.levelEditorMod.alterSnakeCode = function(code) {
   //Make a function to place a sokobox
   code = appendCodeWithinSnakeModule(code, `
   window.placeSokobox = function(x,y) {
+    if(!${modeCheck}(wholeSnakeObject.settings, 9) && !window.hasShownWarnings.sokoban) {
+      alert("You must use sokoban (box) mode for this to work, otherwise you will travel straight through boxes. Use blender mode if you want to include other settings. We won't show this message again.");
+      window.hasShownWarnings.sokoban = true;
+    }
+
     x = Math.round(x);
     y = Math.round(y);
     let sokoCoord = new ${coordConstructor}(x, y);
