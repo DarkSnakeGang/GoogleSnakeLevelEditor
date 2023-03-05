@@ -72,7 +72,7 @@ window.levelEditorMod.runCodeBefore = function() {
 
   //Used by make pattern
   window.roundApplePos = true;//For placing apples with mousedown
-  window.mousePlaceMode = {category: 'box', type:-1};//Category could be apple, wall, drag or box, type corresponds to which apple
+  window.mousePlaceMode = {category: 'apple', type:0};//Category could be apple, wall, drag or box, type corresponds to which apple
   window.disableWallMode = true;//Whether wall mode should place walls every 2 turns
   window.disableAppleInitialSpeed = false;
   window.customSnakeStart = {isActive:false, x:4, y:1};
@@ -769,8 +769,8 @@ window.levelEditorMod.runCodeBefore = function() {
     const htmlToInsert = `
     <div id="place-panel" style="height: 600px; width: 200px; background-color: #bfde80; display: grid; grid-template-columns: 60px 60px 60px; justify-content: space-evenly;box-sizing: border-box; border: 10px solid #507f30;">
       <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="/logos/fnbx/snake_arcade/v13/trophy_01.png" data-type="-1" data-category="wall">
-      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(0%)" draggable="false" src="/logos/fnbx/snake_arcade/v13/trophy_09.png" data-type="-1" data-category="box">
-      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="/logos/fnbx/snake_arcade/v4/apple_00.png" data-type="0" data-category="apple">
+      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="/logos/fnbx/snake_arcade/v13/trophy_09.png" data-type="-1" data-category="box">
+      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(0%)" draggable="false" src="/logos/fnbx/snake_arcade/v4/apple_00.png" data-type="0" data-category="apple">
       <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="/logos/fnbx/snake_arcade/v4/apple_01.png" data-type="1" data-category="apple">
       <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="/logos/fnbx/snake_arcade/v4/apple_02.png" data-type="2" data-category="apple">
       <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="/logos/fnbx/snake_arcade/v4/apple_03.png" data-type="3" data-category="apple">
