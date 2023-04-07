@@ -1169,46 +1169,46 @@ window.levelEditorMod.alterSnakeCode = function(code) {
   ///////////////////////////////////////
 
   //Copied from Pythag
-  window.tileWidth = code.assertMatch(/[a-z]\.[$a-zA-Z0-9_]{0,6}\.fillRect\([a-z]\*[a-z]\.[$a-zA-Z0-9_]{0,6}\.([$a-zA-Z0-9_]{0,6}\.[$a-zA-Z0-9_]{0,6}),[a-z]\*[a-z]\.[$a-zA-Z0-9_]{0,6}\.[$a-zA-Z0-9_]{0,6}\.[$a-zA-Z0-9_]{0,6},[a-z]\.[$a-zA-Z0-9_]{0,6}\.[$a-zA-Z0-9_]{0,6}\.[$a-zA-Z0-9_]{0,6},[a-z]\.[$a-zA-Z0-9_]{0,6}\.[$a-zA-Z0-9_]{0,6}\.[$a-zA-Z0-9_]{0,6}\)/)[1];//wa
+  window.tileWidth = code.assertMatch(/[a-z]\.[$a-zA-Z0-9_]{0,8}\.fillRect\([a-z]\*[a-z]\.[$a-zA-Z0-9_]{0,8}\.([$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}),[a-z]\*[a-z]\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8},[a-z]\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8},[a-z]\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}\)/)[1];//wa
 
   //setup for being able to move apples
   //Copied from gravity, but adjusted to be global and use code. intead of funcWithEat. and capturing groups adjusted.
-  [,window.applePosProperty, window.appleSpeedProperty] = code.assertMatch(/&&\([$a-zA-Z0-9_]{0,6}\.[$a-zA-Z0-9_]{0,6}\.x&&\([$a-zA-Z0-9_]{0,6}\.([$a-zA-Z0-9_]{0,6})\.x\+=[$a-zA-Z0-9_]{0,6}\.([$a-zA-Z0-9_]{0,6})\.x\),/);
+  [,window.applePosProperty, window.appleSpeedProperty] = code.assertMatch(/&&\([$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}\.x&&\([$a-zA-Z0-9_]{0,8}\.([$a-zA-Z0-9_]{0,8})\.x\+=[$a-zA-Z0-9_]{0,8}\.([$a-zA-Z0-9_]{0,8})\.x\),/);
 
   //Lifted from pythag
-  window.bodyArray = code.assertMatch(/var [a-z]=this\.[$a-zA-Z0-9_]{0,6}\.([$a-zA-Z0-9_]{0,6}\.[$a-zA-Z0-9_]{0,6})\[0\]\.clone\(\);/)[1];
+  window.bodyArray = code.assertMatch(/var [a-z]=this\.[$a-zA-Z0-9_]{0,8}\.([$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8})\[0\]\.clone\(\);/)[1];
 
-  window.makeApple = code.assertMatch(/this\.[$a-zA-Z0-9_]{0,6}\.push\(([$a-zA-Z0-9_]{0,6})\(this,-5,-4\)\)/)[1];
-  window.appleArray = code.assertMatch(/this\.([$a-zA-Z0-9_]{0,6})\.push\([$a-zA-Z0-9_]{0,6}\(this,-6,-3\)\)/)[1];
+  window.makeApple = code.assertMatch(/this\.[$a-zA-Z0-9_]{0,8}\.push\(([$a-zA-Z0-9_]{0,8})\(this,-5,-4\)\)/)[1];
+  window.appleArray = code.assertMatch(/this\.([$a-zA-Z0-9_]{0,8})\.push\([$a-zA-Z0-9_]{0,8}\(this,-6,-3\)\)/)[1];
 
   //whole snake object has an object which in turn has the appleArray. (It's messy I know)
-  window.appleArrayHolderOfWholeSnakeObject = code.assertMatch(/this\.([$a-zA-Z0-9_]{0,6})\.reset\(\);this\.[$a-zA-Z0-9_]{0,6}=!1;/)[1];
+  window.appleArrayHolderOfWholeSnakeObject = code.assertMatch(/this\.([$a-zA-Z0-9_]{0,8})\.reset\(\);this\.[$a-zA-Z0-9_]{0,8}=!1;/)[1];
 
-  window.coordConstructor = swapInSnakeGlobal(code.assertMatch(/new (_\.[$a-zA-Z0-9_]{0,6})\(1,1\)/)[1]);
+  window.coordConstructor = swapInSnakeGlobal(code.assertMatch(/new (_\.[$a-zA-Z0-9_]{0,8})\(1,1\)/)[1]);
 
   //Board dimensions - found in wholeSnakeObject, has width, height properties
-  window.boardDimensions = code.assertMatch(/x===Math.floor\([a-z]\.[$a-zA-Z0-9_]{0,6}\.([$a-zA-Z0-9_]{0,6}\.[$a-zA-Z0-9_]{0,6})\.width\/2\)&&/)[1];
+  window.boardDimensions = code.assertMatch(/x===Math.floor\([a-z]\.[$a-zA-Z0-9_]{0,8}\.([$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8})\.width\/2\)&&/)[1];
 
   //Checks whether we are playing a specific mode e.g. VK(this.settings,2) is true if we are playing portal
-  let modeCheck = code.assertMatch(/([$a-zA-Z0-9_]{0,6})\(this\.settings,6\)/)[1];
+  let modeCheck = code.assertMatch(/([$a-zA-Z0-9_]{0,8})\(this\.settings,6\)/)[1];
 
   //Set snakeGlobalObject every reset
   let funcWithReset, funcWithResetOrig;
-  funcWithReset = funcWithResetOrig = findFunctionInCode(code, /[$a-zA-Z0-9_]{0,6}\.reset=function\(a\)$/,
+  funcWithReset = funcWithResetOrig = findFunctionInCode(code, /[$a-zA-Z0-9_]{0,8}\.reset=function\(a\)$/,
   /a=\n?\.66/,
   false);
 
   funcWithReset = assertReplace(funcWithReset,'{','{window.wholeSnakeObject = this;');//This line is changed slightly from varied.js
 
-  funcWithReset = assertReplace(funcWithReset, /[$a-zA-Z0-9_]{0,6}\([a-z]\.settings\)&&\([a-z]\.[$a-zA-Z0-9_]{0,6}\.[$a-zA-Z0-9_]{0,6}=!0\)\)/,
+  funcWithReset = assertReplace(funcWithReset, /[$a-zA-Z0-9_]{0,8}\([a-z]\.settings\)&&\([a-z]\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}=!0\)\)/,
     `$&;window.simpleHookManager.runHook('afterResetBoard')`);
 
   code = code.replace(funcWithResetOrig, funcWithReset);
 
   //Get the object that contains the wholeSnakeObject.
   let funcWithResetState, funcWithResetStateOrig;
-  funcWithResetState = funcWithResetStateOrig = findFunctionInCode(code, /[$a-zA-Z0-9_]{0,6}\.prototype\.resetState=function\(a\)$/,
-  /void 0===[a-z]\?!0:[a-z];this\.[$a-zA-Z0-9_]{0,6}\.reset\(a\);/);
+  funcWithResetState = funcWithResetStateOrig = findFunctionInCode(code, /[$a-zA-Z0-9_]{0,8}\.prototype\.resetState=function\(a\)$/,
+  /void 0===[a-z]\?!0:[a-z];this\.[$a-zA-Z0-9_]{0,8}\.reset\(a\);/);
 
   funcWithResetState = assertReplace(funcWithResetState, '{', '{window.megaWholeSnakeObject = this;');
 
@@ -1239,15 +1239,15 @@ window.levelEditorMod.alterSnakeCode = function(code) {
   }
   `, false);
 
-  let wallDetailsContainer = code.assertMatch(/[$a-zA-Z0-9_]{0,6}&&\([$a-zA-Z0-9_]{0,6}\(this\.([$a-zA-Z0-9_]{0,6}),[$a-zA-Z0-9_]{0,6}\),[$a-zA-Z0-9_]{0,6}\(this\.settings,7\)/)[1];
+  let wallDetailsContainer = code.assertMatch(/[$a-zA-Z0-9_]{0,8}&&\([$a-zA-Z0-9_]{0,8}\(this\.([$a-zA-Z0-9_]{0,8}),[$a-zA-Z0-9_]{0,8}\),[$a-zA-Z0-9_]{0,8}\(this\.settings,7\)/)[1];
 
   //Setup for being able to place walls
   //For reference, we are matching the check for placing the "middle" wall in yinyang
   /*
   this.yb.push({Jb: a,Wm: !1,vz: -1,DH: !0,Th: !0}),
   */
-  //let [,placeWallFunc,wallCoordProperty,otherProperty1,fakeWallProperty,otherProperty2] = code.match(/([$a-zA-Z0-9_]{0,6})\(this,[a-z],{([$a-zA-Z0-9_]{0,6}):[a-z],([$a-zA-Z0-9_]{0,6}:!1,[$a-zA-Z0-9_]{0,6}:-1),([$a-zA-Z0-9_]{0,6}):!0,([$a-zA-Z0-9_]{0,6}:!0,[$a-zA-Z0-9_]{0,6}:void 0)}\)/);
-  let [,placeWallFunc,wallCoordProperty,otherProperty1,fakeWallProperty,otherProperty2] = code.assertMatch(/([$a-zA-Z0-9_]{0,6})\(this,[a-z],{([$a-zA-Z0-9_]{0,6}):[a-z],([$a-zA-Z0-9_]{0,6}:!1),([$a-zA-Z0-9_]{0,6}):!0,([$a-zA-Z0-9_]{0,6}:!0)}\)/);
+  //let [,placeWallFunc,wallCoordProperty,otherProperty1,fakeWallProperty,otherProperty2] = code.match(/([$a-zA-Z0-9_]{0,8})\(this,[a-z],{([$a-zA-Z0-9_]{0,8}):[a-z],([$a-zA-Z0-9_]{0,8}:!1,[$a-zA-Z0-9_]{0,8}:-1),([$a-zA-Z0-9_]{0,8}):!0,([$a-zA-Z0-9_]{0,8}:!0,[$a-zA-Z0-9_]{0,8}:void 0)}\)/);
+  let [,placeWallFunc,wallCoordProperty,otherProperty1,fakeWallProperty,otherProperty2] = code.assertMatch(/([$a-zA-Z0-9_]{0,8})\(this,[a-z],{([$a-zA-Z0-9_]{0,8}):[a-z],([$a-zA-Z0-9_]{0,8}:!1),([$a-zA-Z0-9_]{0,8}):!0,([$a-zA-Z0-9_]{0,8}:!0)}\)/);
 
   //Make a function to place a wall
   code = appendCodeWithinSnakeModule(code, `
@@ -1271,7 +1271,7 @@ window.levelEditorMod.alterSnakeCode = function(code) {
   }
   `, false);
 
-  let wallSet = code.assertMatch(/([$a-zA-Z0-9_]{0,6})\.set\([$a-zA-Z0-9_]{0,6}\([a-z]\),[a-z]\);/)[1];
+  let wallSet = code.assertMatch(/([$a-zA-Z0-9_]{0,8})\.set\([$a-zA-Z0-9_]{0,8}\([a-z]\),[a-z]\);/)[1];
 
   //Make a function to check if a wall exists at a given coordinate
   code = appendCodeWithinSnakeModule(code, `
@@ -1289,9 +1289,9 @@ window.levelEditorMod.alterSnakeCode = function(code) {
   //Probably should've used this function instead of placeWall method with manually pushing to an array, but OH WELL.
 
   let funcWithPlaceWall, funcWithPlaceWallOrig;
-  funcWithPlaceWall = funcWithPlaceWallOrig = findFunctionInCode(code, /[$a-zA-Z0-9_]{0,6}=function\(a,\n?b\)$/,
-  ///[$a-zA-Z0-9_]{0,6}\([a-z],[a-z],{[$a-zA-Z0-9_]{0,6}:[a-z],[$a-zA-Z0-9_]{0,6}:!0,[$a-zA-Z0-9_]{0,6}:-1,[$a-zA-Z0-9_]{0,6}:!1,\n?[$a-zA-Z0-9_]{0,6}:![$a-zA-Z0-9_]{0,6}\([a-z]\.settings,11\),[$a-zA-Z0-9_]{0,6}:void 0}\);/,
-  /[$a-zA-Z0-9_]{0,6}\([a-z],[a-z],{[$a-zA-Z0-9_]{0,6}:[a-z],[$a-zA-Z0-9_]{0,6}:!0,[$a-zA-Z0-9_]{0,6}:!1,\n?[$a-zA-Z0-9_]{0,6}:![$a-zA-Z0-9_]{0,6}\([a-z]\.settings,11\)}\);/,
+  funcWithPlaceWall = funcWithPlaceWallOrig = findFunctionInCode(code, /[$a-zA-Z0-9_]{0,8}=function\(a,\n?b\)$/,
+  ///[$a-zA-Z0-9_]{0,8}\([a-z],[a-z],{[$a-zA-Z0-9_]{0,8}:[a-z],[$a-zA-Z0-9_]{0,8}:!0,[$a-zA-Z0-9_]{0,8}:-1,[$a-zA-Z0-9_]{0,8}:!1,\n?[$a-zA-Z0-9_]{0,8}:![$a-zA-Z0-9_]{0,8}\([a-z]\.settings,11\),[$a-zA-Z0-9_]{0,8}:void 0}\);/,
+  /[$a-zA-Z0-9_]{0,8}\([a-z],[a-z],{[$a-zA-Z0-9_]{0,8}:[a-z],[$a-zA-Z0-9_]{0,8}:!0,[$a-zA-Z0-9_]{0,8}:!1,\n?[$a-zA-Z0-9_]{0,8}:![$a-zA-Z0-9_]{0,8}\([a-z]\.settings,11\)}\);/,
   false);
 
   funcWithPlaceWall = assertReplace(funcWithPlaceWall, '{',
@@ -1303,11 +1303,11 @@ window.levelEditorMod.alterSnakeCode = function(code) {
 
   code = code.replace(funcWithPlaceWallOrig, funcWithPlaceWall);
 
-  let sokoDetailsContainer = code.assertMatch(/this\.([$a-zA-Z0-9_]{0,6})\.reset\(\);if\([$a-zA-Z0-9_]{0,6}\(this\.settings,8\)/)[1];
+  let sokoDetailsContainer = code.assertMatch(/this\.([$a-zA-Z0-9_]{0,8})\.reset\(\);if\([$a-zA-Z0-9_]{0,8}\(this\.settings,8\)/)[1];
 
   //Setup for placing sokoban boxes
-  //let [,sokoboxSet, sokoPosition, sokoOtherProperties] = code.match(/[a-z]\.([$a-zA-Z0-9_]{0,6})\.add\({([$a-zA-Z0-9_]{0,6}):[a-z],prev:null,([$a-zA-Z0-9_]{0,6}:!0,[$a-zA-Z0-9_]{0,6}:-1,[$a-zA-Z0-9_]{0,6}:!0)}\)/);
-  let [,sokoboxSet, sokoPosition, sokoOtherProperties] = code.assertMatch(/[a-z]\.([$a-zA-Z0-9_]{0,6})\.add\({([$a-zA-Z0-9_]{0,6}):[a-z],prev:null,([$a-zA-Z0-9_]{0,6}:!0,[$a-zA-Z0-9_]{0,6}:!0)}\)/);
+  //let [,sokoboxSet, sokoPosition, sokoOtherProperties] = code.match(/[a-z]\.([$a-zA-Z0-9_]{0,8})\.add\({([$a-zA-Z0-9_]{0,8}):[a-z],prev:null,([$a-zA-Z0-9_]{0,8}:!0,[$a-zA-Z0-9_]{0,8}:-1,[$a-zA-Z0-9_]{0,8}:!0)}\)/);
+  let [,sokoboxSet, sokoPosition, sokoOtherProperties] = code.assertMatch(/[a-z]\.([$a-zA-Z0-9_]{0,8})\.add\({([$a-zA-Z0-9_]{0,8}):[a-z],\n?prev:null,([$a-zA-Z0-9_]{0,8}:!0,[$a-zA-Z0-9_]{0,8}:!0)}\)/);
 
   //Make a function to place a sokobox
   code = appendCodeWithinSnakeModule(code, `
@@ -1328,7 +1328,7 @@ window.levelEditorMod.alterSnakeCode = function(code) {
   }
   `, false);
 
-  let sokogoalSet = code.assertMatch(/[$a-zA-Z0-9_]{0,6}\([a-z]\.settings,\n?7\)&&[a-z]\.([$a-zA-Z0-9_]{0,6})\.add\([$a-zA-Z0-9_]{0,6}\([a-z]\.[$a-zA-Z0-9_]{0,6},\n?[a-z]\)\)\)/)[1];
+  let sokogoalSet = code.assertMatch(/[$a-zA-Z0-9_]{0,8}\([a-z]\.settings,\n?7\)&&[a-z]\.([$a-zA-Z0-9_]{0,8})\.add\([$a-zA-Z0-9_]{0,8}\([a-z]\.[$a-zA-Z0-9_]{0,8},\n?[a-z]\)\)\)/)[1];
 
   //Make a function that removes sokoban goals
   code = appendCodeWithinSnakeModule(code, `
@@ -1347,12 +1347,12 @@ window.levelEditorMod.alterSnakeCode = function(code) {
   //Allow customising which position the snake starts from
 
   let funcWithSnakeStartPos, funcWithSnakeStartPosOrig;
-  funcWithSnakeStartPos = funcWithSnakeStartPosOrig = findFunctionInCode(code, /[$a-zA-Z0-9_]{0,6}\.prototype\.reset=function\(\)$/,
-    /this\.[$a-zA-Z0-9_]{0,6}\.push\(new _\.[$a-zA-Z0-9_]{0,6}\(Math\.floor\(this\.[$a-zA-Z0-9_]{0,6}\.[$a-zA-Z0-9_]{0,6}\.width\/4\),Math\.floor\(this\.[$a-zA-Z0-9_]{0,6}\.[$a-zA-Z0-9_]{0,6}\.height\/2\)\)\);/,
+  funcWithSnakeStartPos = funcWithSnakeStartPosOrig = findFunctionInCode(code, /[$a-zA-Z0-9_]{0,8}\.prototype\.reset=function\(\)$/,
+    /this\.[$a-zA-Z0-9_]{0,8}\.push\(new _\.[$a-zA-Z0-9_]{0,8}\(Math\.floor\(this\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}\.width\/4\),Math\.floor\(this\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}\.height\/2\)\)\);/,
     false);
 
   funcWithSnakeStartPos = assertReplace(funcWithSnakeStartPos,
-    /this\.([$a-zA-Z0-9_]{0,6})\.push\(new [^]*3,Math\.floor\(this\.[$a-zA-Z0-9_]{0,6}\.[$a-zA-Z0-9_]{0,6}\.height\/2\)\)\);/,
+    /this\.([$a-zA-Z0-9_]{0,8})\.push\(new [^]*3,Math\.floor\(this\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}\.height\/\n?2\)\)\);/,
     `setSelectedSnakeHead();
     if(customSnakeStart.isActive) {
       this.$1.push(new ${window.coordConstructor}(customSnakeStart.x, customSnakeStart.y));
@@ -1364,20 +1364,20 @@ window.levelEditorMod.alterSnakeCode = function(code) {
   code = code.replace(funcWithSnakeStartPosOrig, funcWithSnakeStartPos);
 
   //Func used to change settings in the menu
-  let funcWithChangeSetting = findFunctionInCode(code, /[$a-zA-Z0-9_]{0,6}=function\(a,b,c,d\)$/,
-  /case "apple":[a-z]\.settings\.[$a-zA-Z0-9_]{0,6}=[a-z];break;/,
+  let funcWithChangeSetting = findFunctionInCode(code, /[$a-zA-Z0-9_]{0,8}=function\(a,b,c,d\)$/,
+  /case "apple":[a-z]\.settings\.[$a-zA-Z0-9_]{0,8}=[a-z];break;/,
   false);
 
   //Just need the name of this function so we can call it.
-  window.changeSettingFuncName = /[$a-zA-Z0-9_]{0,6}/.exec(funcWithChangeSetting)[0];
+  window.changeSettingFuncName = /[$a-zA-Z0-9_]{0,8}/.exec(funcWithChangeSetting)[0];
 
   //Func used to do a full reset (simulating click play from menu button?)
-  let funcWithFullReset = findFunctionInCode(code, /[$a-zA-Z0-9_]{0,6}=function\(\)$/,
-  /if\(this\.menu\.isVisible\(\)\|\|this\.[$a-zA-Z0-9_]{0,6}\.[$a-zA-Z0-9_]{0,6}\)/,
+  let funcWithFullReset = findFunctionInCode(code, /[$a-zA-Z0-9_]{0,8}=function\(\)$/,
+  /if\(this\.menu\.isVisible\(\)\|\|this\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}\)/,
   false);
 
   //Just need the name of this function so we can call it.
-  window.fullResetFuncName = /[$a-zA-Z0-9_]{0,6}/.exec(funcWithFullReset)[0];
+  window.fullResetFuncName = /[$a-zA-Z0-9_]{0,8}/.exec(funcWithFullReset)[0];
 
   //Changes the size setting that is selected in the menu
   //newSize - 0 for normal, 1 for small, 2 for large
