@@ -48,36 +48,36 @@ window.levelEditorMod.runCodeBefore = function() {
 
   const isProd = true;
 
-  window.rootUrl;
-  window.imagePresetsFolder;
-  window.sharedUrl;
-  window.randomHamUrl;
-  window.challengeUrl;
+  globalThis.rootUrl;
+  globalThis.imagePresetsFolder;
+  globalThis.sharedUrl;
+  globalThis.randomHamUrl;
+  globalThis.challengeUrl;
 
   if(isProd) {
     //Live
-    window.rootUrl = 'https://raw.githubusercontent.com/DarkSnakeGang/GoogleSnakeLevelEditor/main/';
-    window.imagePresetsFolder = 'image-presets/';
-    window.sharedUrl = 'https://raw.githubusercontent.com/DarkSnakeGang/GoogleSnakeLevelEditor/main/shared.js';
-    window.randomHamUrl = 'https://raw.githubusercontent.com/DarkSnakeGang/GoogleSnakeLevelEditor/main/random_ham.txt';
-    window.challengeUrl = 'https://raw.githubusercontent.com/DarkSnakeGang/GoogleSnakeLevelEditor/main/challenge.txt';
+    globalThis.rootUrl = 'https://raw.githubusercontent.com/DarkSnakeGang/GoogleSnakeLevelEditor/main/';
+    globalThis.imagePresetsFolder = 'image-presets/';
+    globalThis.sharedUrl = 'https://raw.githubusercontent.com/DarkSnakeGang/GoogleSnakeLevelEditor/main/shared.js';
+    globalThis.randomHamUrl = 'https://raw.githubusercontent.com/DarkSnakeGang/GoogleSnakeLevelEditor/main/random_ham.txt';
+    globalThis.challengeUrl = 'https://raw.githubusercontent.com/DarkSnakeGang/GoogleSnakeLevelEditor/main/challenge.txt';
   } else {
     //Dev
-    window.rootUrl = 'http://localhost:3000/';
-    window.imagePresetsFolder = 'presets-windows-symlink/';
-    window.sharedUrl = 'https://raw.githubusercontent.com/DarkSnakeGang/GoogleSnakeLevelEditor/main/shared.js';
-    window.randomHamUrl = 'http://localhost:3000/random_ham.txt';
-    window.challengeUrl = 'http://localhost:3000/challenge.txt';
+    globalThis.rootUrl = 'http://localhost:3000/';
+    globalThis.imagePresetsFolder = 'presets-windows-symlink/';
+    globalThis.sharedUrl = 'https://raw.githubusercontent.com/DarkSnakeGang/GoogleSnakeLevelEditor/main/shared.js';
+    globalThis.randomHamUrl = 'http://localhost:3000/random_ham.txt';
+    globalThis.challengeUrl = 'http://localhost:3000/challenge.txt';
   }
 
   //Used by make pattern
-  window.roundApplePos = true;//For placing apples with mousedown
-  window.mousePlaceMode = {category: 'apple', type:0};//Category could be apple, wall, drag or box, type corresponds to which apple
-  window.disableWallMode = true;//Whether wall mode should place walls every 2 turns
-  window.disableAppleInitialSpeed = false;
-  window.customSnakeStart = {isActive:false, x:4, y:1};
-  window.hasShownWarnings = {wall: false, sokoban: false};//Whether we have shown the warning about walls/boxes not having collisions without the right mode selected.
-  window.customPresetManager = {
+  globalThis.roundApplePos = true;//For placing apples with mousedown
+  globalThis.mousePlaceMode = {category: 'apple', type:0};//Category could be apple, wall, drag or box, type corresponds to which apple
+  globalThis.disableWallMode = true;//Whether wall mode should place walls every 2 turns
+  globalThis.disableAppleInitialSpeed = false;
+  globalThis.customSnakeStart = {isActive:false, x:4, y:1};
+  globalThis.hasShownWarnings = {wall: false, sokoban: false};//Whether we have shown the warning about walls/boxes not having collisions without the right mode selected.
+  globalThis.customPresetManager = {
     canvasWidth:370,
     canvasHeight:340,
     currentMapSize:'standard',
@@ -523,14 +523,14 @@ window.levelEditorMod.runCodeBefore = function() {
             if(disableAppleInitialSpeed) {
               intialSpeed = {x:0, y:0};
             }
-            placeApple(pixelList[i].x + offsetX,pixelList[i].y + offsetY,pixelList[i].type, intialSpeed);
+            window.placeApple(pixelList[i].x + offsetX,pixelList[i].y + offsetY,pixelList[i].type, intialSpeed);
           }
           break;
         case 'wall':
-          placeWall(pixelList[i].x, pixelList[i].y, true);
+          window.placeWall(pixelList[i].x, pixelList[i].y, true);
           break;
         case 'box':
-          placeSokobox(pixelList[i].x, pixelList[i].y);
+          window.placeSokobox(pixelList[i].x, pixelList[i].y);
           break;
         case 'snakehead':
           //Do nothing since we handle the snakehead stuff somewhere else
@@ -707,8 +707,8 @@ window.levelEditorMod.runCodeBefore = function() {
   window.placeAppleAtMouse = function(event) {
     let canvasRect = gameCanvasElMakePattern.getBoundingClientRect();
     const offsetFromBorder = {x:26,y:26};
-    if(wholeSnakeObject && tileWidth && placeApple && placeWall && placeSokobox) {
-      const calculatedTileWidth = eval(`wholeSnakeObject.${tileWidth}`);
+    if(window.wholeSnakeObject && tileWidth && window.placeApple && window.placeWall && window.placeSokobox) {
+      const calculatedTileWidth = eval(`window.wholeSnakeObject.${tileWidth}`);
       mouseX = event.clientX - canvasRect.left - offsetFromBorder.x - calculatedTileWidth/2;
       mouseY = event.clientY - canvasRect.top - offsetFromBorder.y - calculatedTileWidth/2;
       gameCoordX = mouseX / calculatedTileWidth;
@@ -719,13 +719,13 @@ window.levelEditorMod.runCodeBefore = function() {
           //Undo offset for spawn point
           var spawnOffset = getAppleSpawnPointOffset();
           gameCoordX += spawnOffset.x; gameCoordY += spawnOffset.y;
-          roundApplePos ? placeApple(Math.round(gameCoordX), Math.round(gameCoordY), mousePlaceMode.type) : placeApple(gameCoordX, gameCoordY, mousePlaceMode.type);
+          roundApplePos ? window.placeApple(Math.round(gameCoordX), Math.round(gameCoordY), mousePlaceMode.type) : window.placeApple(gameCoordX, gameCoordY, mousePlaceMode.type);
           break;
         case 'wall':
-          placeWall(gameCoordX, gameCoordY, true);
+          window.placeWall(gameCoordX, gameCoordY, true);
           break;
         case 'box':
-          placeSokobox(gameCoordX, gameCoordY);
+          window.placeSokobox(gameCoordX, gameCoordY);
           break;
         default:
           console.log('mousePlaceCategory set incorrectly. Ignoring');
@@ -1124,7 +1124,7 @@ window.levelEditorMod.runCodeBefore = function() {
   
   //Used so we can adjust where to spawn apples based on where the default spawn point is so that we can instead spawn stuff relative to top left
   window.getAppleSpawnPointOffset = function() {
-    const boardWidth = eval(`wholeSnakeObject.${boardDimensions}.width`);
+    const boardWidth = eval(`window.wholeSnakeObject.${boardDimensions}.width`);
     switch(boardWidth) {
       case 17:
         return {x:-12,y:-7};
@@ -1145,8 +1145,8 @@ window.levelEditorMod.runCodeBefore = function() {
   }
   
   window.checkPatternInBounds = function(pixelList) {
-    const boardWidth = eval(`wholeSnakeObject.${boardDimensions}.width`);
-    const boardHeight = eval(`wholeSnakeObject.${boardDimensions}.height`);
+    const boardWidth = eval(`window.wholeSnakeObject.${boardDimensions}.width`);
+    const boardHeight = eval(`window.wholeSnakeObject.${boardDimensions}.height`);
   
     const hasStuffOutOfBounds = pixelList.some(p => p.x < 0 || p.y < 0 || p.x > boardWidth - 1 || p.y > boardHeight - 1);
   
@@ -1169,28 +1169,29 @@ window.levelEditorMod.alterSnakeCode = function(code) {
   ///////////////////////////////////////
 
   //Copied from Pythag
-  window.tileWidth = code.assertMatch(/[a-z]\.[$a-zA-Z0-9_]{0,8}\.fillRect\([a-z]\*[a-z]\.[$a-zA-Z0-9_]{0,8}\.([$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}),[a-z]\*[a-z]\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8},[a-z]\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8},[a-z]\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}\)/)[1];//wa
+  globalThis.tileWidth = code.assertMatch(/[a-z]\.[$a-zA-Z0-9_]{0,8}\.fillRect\([a-z]\*[a-z]\.[$a-zA-Z0-9_]{0,8}\.([$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}),[a-z]\*[a-z]\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8},[a-z]\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8},[a-z]\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}\)/)[1];//wa
 
   //setup for being able to move apples
   //Copied from gravity, but adjusted to be global and use code. intead of funcWithEat. and capturing groups adjusted.
-  [,window.applePosProperty, window.appleSpeedProperty] = code.assertMatch(/&&\([$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}\.x&&\([$a-zA-Z0-9_]{0,8}\.([$a-zA-Z0-9_]{0,8})\.x\+=[$a-zA-Z0-9_]{0,8}\.([$a-zA-Z0-9_]{0,8})\.x\),/);
+  [,globalThis.applePosProperty, globalThis.appleSpeedProperty] = code.assertMatch(/&&\([$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}\.x&&\([$a-zA-Z0-9_]{0,8}\.([$a-zA-Z0-9_]{0,8})\.x\+=[$a-zA-Z0-9_]{0,8}\.([$a-zA-Z0-9_]{0,8})\.x\),/);
 
   //Lifted from pythag
-  window.bodyArray = code.assertMatch(/var [a-z]=this\.[$a-zA-Z0-9_]{0,8}\.([$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8})\[0\]\.clone\(\);/)[1];
+  globalThis.bodyArray = code.assertMatch(/var [a-z]=this\.[$a-zA-Z0-9_]{0,8}\.([$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8})\[0\]\.clone\(\);/)[1];
 
-  window.makeApple = code.assertMatch(/this\.[$a-zA-Z0-9_]{0,8}\.push\(([$a-zA-Z0-9_]{0,8})\(this,-5,-4\)\)/)[1];
-  window.appleArray = code.assertMatch(/this\.([$a-zA-Z0-9_]{0,8})\.push\([$a-zA-Z0-9_]{0,8}\(this,-6,-3\)\)/)[1];
+  globalThis.makeApple = code.assertMatch(/this\.[$a-zA-Z0-9_]{0,8}\.push\(([$a-zA-Z0-9_]{0,8})\(this,-5,-4\)\)/)[1];
+  globalThis.appleArray = code.assertMatch(/this\.([$a-zA-Z0-9_]{0,8})\.push\([$a-zA-Z0-9_]{0,8}\(this,-6,-3\)\)/)[1];
 
   //whole snake object has an object which in turn has the appleArray. (It's messy I know)
-  window.appleArrayHolderOfWholeSnakeObject = code.assertMatch(/this\.([$a-zA-Z0-9_]{0,8})\.reset\(\);this\.[$a-zA-Z0-9_]{0,8}=!1;/)[1];
+  globalThis.appleArrayHolderOfWholeSnakeObject = code.assertMatch(/this\.([$a-zA-Z0-9_]{0,8})\.reset\(\);this\.[$a-zA-Z0-9_]{0,8}=!1;/)[1];
 
-  window.coordConstructor = swapInSnakeGlobal(code.assertMatch(/new (_\.[$a-zA-Z0-9_]{0,8})\(1,1\)/)[1]);
+  //globalThis.coordConstructor = swapInSnakeGlobal(code.assertMatch(/new (_\.[$a-zA-Z0-9_]{0,8})\(1,1\)/)[1]);
+  globalThis.coordConstructor = code.assertMatch(/new (_\.[$a-zA-Z0-9_]{0,8})\(1,1\)/)[1];
 
   //Board dimensions - found in wholeSnakeObject, has width, height properties
-  window.boardDimensions = code.assertMatch(/x===Math.floor\([a-z]\.[$a-zA-Z0-9_]{0,8}\.([$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8})\.width\/2\)&&/)[1];
+  globalThis.boardDimensions = code.assertMatch(/x===Math.floor\([a-z]\.[$a-zA-Z0-9_]{0,8}\.([$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8})\.width\/2\)&&/)[1];
 
   //Checks whether we are playing a specific mode e.g. VK(this.settings,2) is true if we are playing portal
-  let modeCheck = code.assertMatch(/([$a-zA-Z0-9_]{0,8})\(this\.settings,6\)/)[1];
+  let [,modeCheck, settingsProperty] = code.assertMatch(/([$a-zA-Z0-9_]{0,8})\(this\.([$a-zA-Z0-9_]{0,8}),6\)/);
 
   //Set snakeGlobalObject every reset
   let funcWithReset, funcWithResetOrig;
@@ -1198,9 +1199,9 @@ window.levelEditorMod.alterSnakeCode = function(code) {
   /a=\n?\.66/,
   false);
 
-  funcWithReset = assertReplace(funcWithReset,'{','{window.wholeSnakeObject = this;');//This line is changed slightly from varied.js
+  funcWithReset = assertReplace(funcWithReset,'{','{globalThis.wholeSnakeObject = this;');//This line is changed slightly from varied.js
 
-  funcWithReset = assertReplace(funcWithReset, /[$a-zA-Z0-9_]{0,8}\([a-z]\.settings\)&&\([a-z]\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}=!0\)\)/,
+  funcWithReset = assertReplace(funcWithReset, /[$a-zA-Z0-9_]{0,8}\([a-z]\.[$a-zA-Z0-9_]{0,8}\)&&\([a-z]\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}=!0\)\)/,
     `$&;window.simpleHookManager.runHook('afterResetBoard')`);
 
   code = code.replace(funcWithResetOrig, funcWithReset);
@@ -1210,7 +1211,7 @@ window.levelEditorMod.alterSnakeCode = function(code) {
   funcWithResetState = funcWithResetStateOrig = findFunctionInCode(code, /[$a-zA-Z0-9_]{0,8}\.prototype\.resetState=function\(a\)$/,
   /void 0===[a-z]\?!0:[a-z];this\.[$a-zA-Z0-9_]{0,8}\.reset\(a\);/);
 
-  funcWithResetState = assertReplace(funcWithResetState, '{', '{window.megaWholeSnakeObject = this;');
+  funcWithResetState = assertReplace(funcWithResetState, '{', '{globalThis.megaWholeSnakeObject = this;');
 
   code = code.replace(funcWithResetStateOrig, funcWithResetState);
 
@@ -1221,25 +1222,25 @@ window.levelEditorMod.alterSnakeCode = function(code) {
   //Make a function that empties apples
   (0,eval)(`
   function emptyApples() {
-    wholeSnakeObject.${appleArrayHolderOfWholeSnakeObject}.${appleArray}.length = 0;
+    window.wholeSnakeObject.${appleArrayHolderOfWholeSnakeObject}.${appleArray}.length = 0;
   }
   `);
 
   //Make a function to place an apple
   code = appendCodeWithinSnakeModule(code, `
-  window.placeApple = function(x,y,type,initialSpeed=undefined,customProperties={}) {
-    let apple = ${makeApple}(wholeSnakeObject.${appleArrayHolderOfWholeSnakeObject}, x, y);
+  globalThis.placeApple = function(x,y,type,initialSpeed=undefined,customProperties={}) {
+    let apple = ${makeApple}(window.wholeSnakeObject.${appleArrayHolderOfWholeSnakeObject}, x, y);
     apple.type = type;
     if(initialSpeed) {
       apple[window.appleSpeedProperty].x = initialSpeed.x;
       apple[window.appleSpeedProperty].y = initialSpeed.y;
     }
     Object.assign(apple, customProperties);
-    wholeSnakeObject.${appleArrayHolderOfWholeSnakeObject}.${appleArray}.push(apple);
+    window.wholeSnakeObject.${appleArrayHolderOfWholeSnakeObject}.${appleArray}.push(apple);
   }
   `, false);
 
-  let wallDetailsContainer = code.assertMatch(/[$a-zA-Z0-9_]{0,8}&&\([$a-zA-Z0-9_]{0,8}\(this\.([$a-zA-Z0-9_]{0,8}),[$a-zA-Z0-9_]{0,8}\),[$a-zA-Z0-9_]{0,8}\(this\.settings,7\)/)[1];
+  let wallDetailsContainer = code.assertMatch(/[$a-zA-Z0-9_]{0,8}&&\([$a-zA-Z0-9_]{0,8}\(this\.([$a-zA-Z0-9_]{0,8}),\n?[$a-zA-Z0-9_]{0,8}\),[$a-zA-Z0-9_]{0,8}\(this\.[$a-zA-Z0-9_]{0,8},7\)/)[1];
 
   //Setup for being able to place walls
   //For reference, we are matching the check for placing the "middle" wall in yinyang
@@ -1251,8 +1252,8 @@ window.levelEditorMod.alterSnakeCode = function(code) {
 
   //Make a function to place a wall
   code = appendCodeWithinSnakeModule(code, `
-  window.placeWall = function(x, y, banNeighbourSpawning = false) {
-    if(!${modeCheck}(wholeSnakeObject.settings, 1) && !window.hasShownWarnings.wall) {
+  globalThis.placeWall = function(x, y, banNeighbourSpawning = false) {
+    if(!${modeCheck}(window.wholeSnakeObject.${settingsProperty}, 1) && !window.hasShownWarnings.wall) {
       alert("You must use wall mode for this to work, otherwise you will travel straight through walls. Use blender mode if you want to include other settings. We won't show this message again.");
       window.hasShownWarnings.wall = true;
     }
@@ -1260,7 +1261,7 @@ window.levelEditorMod.alterSnakeCode = function(code) {
     x = Math.round(x);
     y = Math.round(y);
     let wallCoord = new ${coordConstructor}(x, y);
-    ${placeWallFunc}(wholeSnakeObject.${wallDetailsContainer}, wallCoord,
+    ${placeWallFunc}(window.wholeSnakeObject.${wallDetailsContainer}, wallCoord,
       {
         ${wallCoordProperty}: wallCoord,
         ${otherProperty1},
@@ -1275,13 +1276,13 @@ window.levelEditorMod.alterSnakeCode = function(code) {
 
   //Make a function to check if a wall exists at a given coordinate
   code = appendCodeWithinSnakeModule(code, `
-  window.checkWall = function(x,y) {
-    if(x < 0 || x >= wholeSnakeObject.${boardDimensions}.width || y < 0 || y >= wholeSnakeObject.${boardDimensions}.height) {
+  globalThis.checkWall = function(x,y) {
+    if(x < 0 || x >= window.wholeSnakeObject.${boardDimensions}.width || y < 0 || y >= window.wholeSnakeObject.${boardDimensions}.height) {
       return true;
     }
 
     let serialisedCoord = x << 16 | y;
-    let isWall = wholeSnakeObject.${wallDetailsContainer}.${wallSet}.has(serialisedCoord);
+    let isWall = window.wholeSnakeObject.${wallDetailsContainer}.${wallSet}.has(serialisedCoord);
     return isWall;
   }
   `, false);
@@ -1291,7 +1292,7 @@ window.levelEditorMod.alterSnakeCode = function(code) {
   let funcWithPlaceWall, funcWithPlaceWallOrig;
   funcWithPlaceWall = funcWithPlaceWallOrig = findFunctionInCode(code, /[$a-zA-Z0-9_]{0,8}=function\(a,\n?b\)$/,
   ///[$a-zA-Z0-9_]{0,8}\([a-z],[a-z],{[$a-zA-Z0-9_]{0,8}:[a-z],[$a-zA-Z0-9_]{0,8}:!0,[$a-zA-Z0-9_]{0,8}:-1,[$a-zA-Z0-9_]{0,8}:!1,\n?[$a-zA-Z0-9_]{0,8}:![$a-zA-Z0-9_]{0,8}\([a-z]\.settings,11\),[$a-zA-Z0-9_]{0,8}:void 0}\);/,
-  /[$a-zA-Z0-9_]{0,8}\([a-z],[a-z],{[$a-zA-Z0-9_]{0,8}:[a-z],[$a-zA-Z0-9_]{0,8}:!0,[$a-zA-Z0-9_]{0,8}:!1,\n?[$a-zA-Z0-9_]{0,8}:![$a-zA-Z0-9_]{0,8}\([a-z]\.settings,11\)}\);/,
+  /[$a-zA-Z0-9_]{0,8}\([a-z],[a-z],{[$a-zA-Z0-9_]{0,8}:[a-z],[$a-zA-Z0-9_]{0,8}:!0,[$a-zA-Z0-9_]{0,8}:!1,\n?[$a-zA-Z0-9_]{0,8}:![$a-zA-Z0-9_]{0,8}\([a-z]\.[$a-zA-Z0-9_]{0,8},\n?11\)}\);/,
   false);
 
   funcWithPlaceWall = assertReplace(funcWithPlaceWall, '{',
@@ -1303,16 +1304,16 @@ window.levelEditorMod.alterSnakeCode = function(code) {
 
   code = code.replace(funcWithPlaceWallOrig, funcWithPlaceWall);
 
-  let sokoDetailsContainer = code.assertMatch(/this\.([$a-zA-Z0-9_]{0,8})\.reset\(\);if\([$a-zA-Z0-9_]{0,8}\(this\.settings,8\)/)[1];
+  let sokoDetailsContainer = code.assertMatch(/this\.([$a-zA-Z0-9_]{0,8})\.reset\(\);if\([$a-zA-Z0-9_]{0,8}\(this\.[$a-zA-Z0-9_]{0,8},8\)/)[1];
 
   //Setup for placing sokoban boxes
   //let [,sokoboxSet, sokoPosition, sokoOtherProperties] = code.match(/[a-z]\.([$a-zA-Z0-9_]{0,8})\.add\({([$a-zA-Z0-9_]{0,8}):[a-z],prev:null,([$a-zA-Z0-9_]{0,8}:!0,[$a-zA-Z0-9_]{0,8}:-1,[$a-zA-Z0-9_]{0,8}:!0)}\)/);
-  let [,sokoboxSet, sokoPosition, sokoOtherProperties] = code.assertMatch(/[a-z]\.([$a-zA-Z0-9_]{0,8})\.add\({([$a-zA-Z0-9_]{0,8}):[a-z],\n?prev:null,([$a-zA-Z0-9_]{0,8}:!0,[$a-zA-Z0-9_]{0,8}:!0)}\)/);
+  let [,sokoboxSet, sokoPosition, sokoPrevProperty, sokoOtherProperties] = code.assertMatch(/[a-z]\.([$a-zA-Z0-9_]{0,8})\.add\({([$a-zA-Z0-9_]{0,8}):[a-z],\n?([$a-zA-Z0-9_]{0,8}):null,([$a-zA-Z0-9_]{0,8}:!0,[$a-zA-Z0-9_]{0,8}:!0)}\)/);
 
   //Make a function to place a sokobox
   code = appendCodeWithinSnakeModule(code, `
-  window.placeSokobox = function(x,y) {
-    if(!${modeCheck}(wholeSnakeObject.settings, 9) && !window.hasShownWarnings.sokoban) {
+  globalThis.placeSokobox = function(x,y) {
+    if(!${modeCheck}(window.wholeSnakeObject.${settingsProperty}, 9) && !window.hasShownWarnings.sokoban) {
       alert("You must use sokoban (box) mode for this to work, otherwise you will travel straight through boxes. Use blender mode if you want to include other settings. We won't show this message again.");
       window.hasShownWarnings.sokoban = true;
     }
@@ -1320,27 +1321,27 @@ window.levelEditorMod.alterSnakeCode = function(code) {
     x = Math.round(x);
     y = Math.round(y);
     let sokoCoord = new ${coordConstructor}(x, y);
-    wholeSnakeObject.${sokoDetailsContainer}.${sokoboxSet}.add({
+    window.wholeSnakeObject.${sokoDetailsContainer}.${sokoboxSet}.add({
       ${sokoPosition}: sokoCoord,
-      prev:null,
+      ${sokoPrevProperty}:null,
       ${sokoOtherProperties}
     });
   }
   `, false);
 
-  let sokogoalSet = code.assertMatch(/[$a-zA-Z0-9_]{0,8}\([a-z]\.settings,\n?7\)&&[a-z]\.([$a-zA-Z0-9_]{0,8})\.add\([$a-zA-Z0-9_]{0,8}\([a-z]\.[$a-zA-Z0-9_]{0,8},\n?[a-z]\)\)\)/)[1];
+  let sokogoalSet = code.assertMatch(/[$a-zA-Z0-9_]{0,8}\([a-z]\.[$a-zA-Z0-9_]{0,8},\n?7\)&&[a-z]\.([$a-zA-Z0-9_]{0,8})\.add\([$a-zA-Z0-9_]{0,8}\([a-z]\.[$a-zA-Z0-9_]{0,8},\n?[a-z]\)\)\)/)[1];
 
   //Make a function that removes sokoban goals
   code = appendCodeWithinSnakeModule(code, `
-  window.emptySokogoals = function(x,y) {
-    wholeSnakeObject.${sokoDetailsContainer}.${sokogoalSet}.clear();
+  globalThis.emptySokogoals = function(x,y) {
+    window.wholeSnakeObject.${sokoDetailsContainer}.${sokogoalSet}.clear();
   }
   `, false);
 
   //Also have a function for emptying sokoboxes
   code = appendCodeWithinSnakeModule(code, `
-  window.emptySokoboxes = function(x,y) {
-    wholeSnakeObject.${sokoDetailsContainer}.${sokoboxSet}.clear();
+  globalThis.emptySokoboxes = function(x,y) {
+    window.wholeSnakeObject.${sokoDetailsContainer}.${sokoboxSet}.clear();
   }
   `, false);
 
@@ -1365,28 +1366,31 @@ window.levelEditorMod.alterSnakeCode = function(code) {
 
   //Func used to change settings in the menu
   let funcWithChangeSetting = findFunctionInCode(code, /[$a-zA-Z0-9_]{0,8}=function\(a,b,c,d\)$/,
-  /case "apple":[a-z]\.settings\.[$a-zA-Z0-9_]{0,8}=[a-z];break;/,
+  /case "apple":[a-z]\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}=[a-z];break;/,
   false);
 
   //Just need the name of this function so we can call it.
-  window.changeSettingFuncName = /[$a-zA-Z0-9_]{0,8}/.exec(funcWithChangeSetting)[0];
+  globalThis.changeSettingFuncName = /[$a-zA-Z0-9_]{0,8}/.exec(funcWithChangeSetting)[0];
+
+  //Menu property - same regex as below
+  let menuProperty = code.assertMatch(/if\(this\.([$a-zA-Z0-9_]{0,8})\.isVisible\(\)\|\|this\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}\)/)[1];
 
   //Func used to do a full reset (simulating click play from menu button?)
   let funcWithFullReset = findFunctionInCode(code, /[$a-zA-Z0-9_]{0,8}=function\(\)$/,
-  /if\(this\.menu\.isVisible\(\)\|\|this\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}\)/,
+  /if\(this\.[$a-zA-Z0-9_]{0,8}\.isVisible\(\)\|\|this\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}\)/,
   false);
 
   //Just need the name of this function so we can call it.
-  window.fullResetFuncName = /[$a-zA-Z0-9_]{0,8}/.exec(funcWithFullReset)[0];
+  globalThis.fullResetFuncName = /[$a-zA-Z0-9_]{0,8}/.exec(funcWithFullReset)[0];
 
   //Changes the size setting that is selected in the menu
   //newSize - 0 for normal, 1 for small, 2 for large
   code = appendCodeWithinSnakeModule(code, `
-  window.selectNewSizeSettingAndHardReset = function(newSizeSetting) {
+  globalThis.selectNewSizeSettingAndHardReset = function(newSizeSetting) {
     //Change size setting
-    if(typeof wholeSnakeObject !== 'undefined' && newSizeSetting !== null) {
+    if(typeof window.wholeSnakeObject !== 'undefined' && newSizeSetting !== null) {
       let sizeEl = document.getElementById('size');
-      ${changeSettingFuncName}(wholeSnakeObject.menu,sizeEl,true,newSizeSetting);
+      ${changeSettingFuncName}(window.wholeSnakeObject.${menuProperty},sizeEl,true,newSizeSetting);
   
       //Also need to reposition and centralise the selected size in the menu. This is quite hacky.
       switch(newSizeSetting) {
@@ -1405,10 +1409,10 @@ window.levelEditorMod.alterSnakeCode = function(code) {
     }
   
     //Hard reset
-    if(typeof megaWholeSnakeObject !== 'undefined') {
-      megaWholeSnakeObject.menu.visible = true;
-      megaWholeSnakeObject[fullResetFuncName]();
-      megaWholeSnakeObject.menu.visible = false;
+    if(typeof window.megaWholeSnakeObject !== 'undefined') {
+      window.megaWholeSnakeObject.${menuProperty}.visible = true;
+      window.megaWholeSnakeObject[fullResetFuncName]();
+      window.megaWholeSnakeObject.${menuProperty}.visible = false;
     }
   }
   `,false);
