@@ -1388,9 +1388,9 @@ window.levelEditorMod.alterSnakeCode = function(code) {
   code = appendCodeWithinSnakeModule(code, `
   globalThis.selectNewSizeSettingAndHardReset = function(newSizeSetting) {
     //Change size setting
-    if(typeof window.wholeSnakeObject !== 'undefined' && newSizeSetting !== null) {
+    if(typeof window.megaWholeSnakeObject !== 'undefined' && newSizeSetting !== null) {
       let sizeEl = document.getElementById('size');
-      ${changeSettingFuncName}(window.wholeSnakeObject.${menuProperty},sizeEl,true,newSizeSetting);
+      ${changeSettingFuncName}(window.megaWholeSnakeObject.${menuProperty},sizeEl,true,newSizeSetting);
   
       //Also need to reposition and centralise the selected size in the menu. This is quite hacky.
       switch(newSizeSetting) {
