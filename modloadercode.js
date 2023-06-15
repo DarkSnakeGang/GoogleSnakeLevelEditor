@@ -1308,7 +1308,7 @@ window.levelEditorMod.alterSnakeCode = function(code) {
 
   //Setup for placing sokoban boxes
   //let [,sokoboxSet, sokoPosition, sokoOtherProperties] = code.match(/[a-z]\.([$a-zA-Z0-9_]{0,8})\.add\({([$a-zA-Z0-9_]{0,8}):[a-z],prev:null,([$a-zA-Z0-9_]{0,8}:!0,[$a-zA-Z0-9_]{0,8}:-1,[$a-zA-Z0-9_]{0,8}:!0)}\)/);
-  let [,sokoboxSet, sokoPosition, sokoPrevProperty, sokoOtherProperties] = code.assertMatch(/[a-z]\.([$a-zA-Z0-9_]{0,8})\.add\({([$a-zA-Z0-9_]{0,8}):[a-z],\n?([$a-zA-Z0-9_]{0,8}):null,([$a-zA-Z0-9_]{0,8}:!0,[$a-zA-Z0-9_]{0,8}:!0)}\)/);
+  let [,sokoboxSet, sokoPosition, sokoPrevProperty, sokoPlaySpawnAnimProperty, sokoLastProperty] = code.assertMatch(/[a-z]\.([$a-zA-Z0-9_]{0,8})\.add\({([$a-zA-Z0-9_]{0,8}):[a-z],\n?([$a-zA-Z0-9_]{0,8}):null,([$a-zA-Z0-9_]{0,8}):!0,([$a-zA-Z0-9_]{0,8}):[a-z]}\)/);
 
   //Make a function to place a sokobox
   code = appendCodeWithinSnakeModule(code, `
@@ -1324,7 +1324,8 @@ window.levelEditorMod.alterSnakeCode = function(code) {
     window.wholeSnakeObject.${sokoDetailsContainer}.${sokoboxSet}.add({
       ${sokoPosition}: sokoCoord,
       ${sokoPrevProperty}:null,
-      ${sokoOtherProperties}
+      ${sokoPlaySpawnAnimProperty}:false,
+      ${sokoLastProperty}:true
     });
   }
   `, false);
