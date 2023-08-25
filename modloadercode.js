@@ -1164,6 +1164,8 @@ window.levelEditorMod.runCodeBefore = function() {
 ////////////////////////////////////////////////////////////////////
 
 window.levelEditorMod.alterSnakeCode = function(code) {
+  code = code.replaceAll(/\$\$/gm, `aaaa`); //Prevent issues with $$ in variable names breaking stuff when replaced
+
   ///////////////////////////////////////
   //Taken from shared.js
   ///////////////////////////////////////
