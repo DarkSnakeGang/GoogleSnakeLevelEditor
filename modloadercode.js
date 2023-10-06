@@ -1198,7 +1198,7 @@ window.levelEditorMod.alterSnakeCode = function(code) {
   //Set snakeGlobalObject every reset
   let funcWithReset, funcWithResetOrig;
   funcWithReset = funcWithResetOrig = findFunctionInCode(code, /[$a-zA-Z0-9_]{0,8}\.reset=function\(a\)$/,
-  /a=\n?\.66/,
+  /[a-z]=\n?\.66/,
   false);
 
   funcWithReset = assertReplace(funcWithReset,'{','{globalThis.wholeSnakeObject = this;');//This line is changed slightly from varied.js
@@ -1439,7 +1439,7 @@ window.levelEditorMod.runCodeAfter = function() {
   gameCanvasElMakePattern.addEventListener('mousedown',placeAppleAtMouse);
 
   //styling
-  document.getElementsByClassName('oGdex JWsmhb')[0].style.filter = 'sepia(50%)';
+  document.querySelector('[jsaction="DGXxE"]').style.filter = 'sepia(50%)';
   document.getElementsByClassName('Jc72He rc48Qb')[0].children[0].style.textTransform = 'lowercase';
 
   //Blit the preset pattern as soon as the board is fully reset.
