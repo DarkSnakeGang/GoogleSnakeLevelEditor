@@ -874,32 +874,17 @@ window.levelEditorMod.runCodeBefore = function() {
     myEl.style = style;
   
     document.getElementsByClassName('sEOCsb')[0].appendChild(myEl);
-  
-    //Style differently depending on if snake is centered.
-    let isSnakeCentered = !window.location.href.includes('fbx');
-    let advancedSettings = JSON.parse(localStorage.getItem('snakeAdvancedSettings')) ?? {};
-    if(advancedSettings.hasOwnProperty('fbxCentered') && advancedSettings.fbxCentered) {
-      isSnakeCentered = true;
-    }
 
     //Insert html for the custom preset stuff
     let myCustomEl = document.createElement('div');
     myCustomEl.innerHTML = customPresetHtmlToInsert;
-    myCustomEl.style = isSnakeCentered ? 'position: absolute; right: 100%;z-index:1001;' : 'position: absolute; left: calc(100% + 200px);z-index:1001;';
+    myCustomEl.style = 'position: absolute; right: 100%;z-index:1001;';
   
     document.getElementsByClassName('sEOCsb')[0].appendChild(myCustomEl);
   
-    //Collapse border differently depending on whether custom/challenge panel on left or right.
-    if(isSnakeCentered) {
-      document.getElementById('custom-panel').style.borderRight = 'none';
-      document.getElementById('challenge-panel').style.borderRight = 'none';
-    } else {
-      document.getElementById('custom-panel').style.borderLeft = 'none';
-      document.getElementById('challenge-panel').style.borderLeft = 'none';
-  
-      //Move menu so it doesn't overlap panels
-      document.getElementsByClassName('bZUgDf')[0].style.width = '600px';
-    }
+    //Collapse borders
+    document.getElementById('custom-panel').style.borderRight = 'none';
+    document.getElementById('challenge-panel').style.borderRight = 'none';
   
     //Insert html for custom preset export dialogue box.
     let importModalContainer = document.createElement('div');
