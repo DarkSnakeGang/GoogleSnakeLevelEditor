@@ -1295,8 +1295,9 @@ window.levelEditorMod.alterSnakeCode = function(code) {
   let sokoDetailsContainer = code.assertMatch(/this\.([$a-zA-Z0-9_]{0,8})\.reset\(\);if\([$a-zA-Z0-9_]{0,8}\(this\.[$a-zA-Z0-9_]{0,8},8\)/)[1];
 
   //Setup for placing sokoban boxes
-  //let [,sokoboxSet, sokoPosition, sokoOtherProperties] = code.match(/[a-z]\.([$a-zA-Z0-9_]{0,8})\.add\({([$a-zA-Z0-9_]{0,8}):[a-z],prev:null,([$a-zA-Z0-9_]{0,8}:!0,[$a-zA-Z0-9_]{0,8}:-1,[$a-zA-Z0-9_]{0,8}:!0)}\)/);
-  let [,sokoboxSet, sokoPosition, sokoPrevProperty, sokoPlaySpawnAnimProperty, sokoLastProperty] = code.assertMatch(/[a-z]\.([$a-zA-Z0-9_]{0,8})\.add\({([$a-zA-Z0-9_]{0,8}):[a-z],\n?([$a-zA-Z0-9_]{0,8}):null,([$a-zA-Z0-9_]{0,8}):!0,([$a-zA-Z0-9_]{0,8}):[a-z]}\)/);
+  let [addSokoboxFunc, sokoPosition, sokoPrevProperty, sokoPlaySpawnAnimProperty, sokoLastProperty] = code.assertMatch(/([$a-zA-Z0-9_]{0,8})\([a-z],{([$a-zA-Z0-9_]{0,8}):[a-z],\n?([$a-zA-Z0-9_]{0,8}):null,([$a-zA-Z0-9_]{0,8}):!0,([$a-zA-Z0-9_]{0,8}):[a-z]}\)/);
+
+  let sokoboxSet = code.assertMatch(/[a-z]\.([$a-zA-Z0-9_]{0,8})\.add\([a-z]\);[$a-zA-Z0-9_]{0,8}\([a-z]\.settings,16\)/)[1];
 
   //Make a function to place a sokobox
   code = appendCodeWithinSnakeModule(code, `
@@ -1309,16 +1310,17 @@ window.levelEditorMod.alterSnakeCode = function(code) {
     x = Math.round(x);
     y = Math.round(y);
     let sokoCoord = new ${coordConstructor}(x, y);
-    window.wholeSnakeObject.${sokoDetailsContainer}.${sokoboxSet}.add({
-      ${sokoPosition}: sokoCoord,
-      ${sokoPrevProperty}:null,
-      ${sokoPlaySpawnAnimProperty}:false,
-      ${sokoLastProperty}:true
-    });
-  }
+    ${addSokoboxFunc}(window.wholeSnakeObject.${sokoDetailsContainer},
+      {
+        ${sokoPosition}: sokoCoord,
+        ${sokoPrevProperty}:null,
+        ${sokoPlaySpawnAnimProperty}:false,
+        ${sokoLastProperty}:true
+      });
+    }
   `, false);
 
-  let sokogoalSet = code.assertMatch(/[$a-zA-Z0-9_]{0,8}\([a-z]\.[$a-zA-Z0-9_]{0,8},\n?7\)&&[a-z]\.([$a-zA-Z0-9_]{0,8})\.add\([$a-zA-Z0-9_]{0,8}\([a-z]\.[$a-zA-Z0-9_]{0,8},\n?[a-z]\)\)\)/)[1];
+  let sokogoalSet = code.assertMatch(/[$a-zA-Z0-9_]{0,8}\([a-z]\.[$a-zA-Z0-9_]{0,8},\n?7\)&&[a-z]\.([$a-zA-Z0-9_]{0,8})\.add\([$a-zA-Z0-9_]{0,8}\([a-z]\.[$a-zA-Z0-9_]{0,8},\n?[a-z]\)\),/)[1];
 
   //Make a function that removes sokoban goals
   code = appendCodeWithinSnakeModule(code, `
