@@ -1183,7 +1183,7 @@ window.levelEditorMod.alterSnakeCode = function(code) {
 
   //Set snakeGlobalObject every reset
   let funcWithReset, funcWithResetOrig;
-  funcWithReset = funcWithResetOrig = findFunctionInCode(code, /[$a-zA-Z0-9_]{0,8}\.reset=function\(a\)$/,
+  funcWithReset = funcWithResetOrig = findFunctionInCode(code, /[$a-zA-Z0-9_]{0,8}\.reset=function\(\)$/,
   /[a-z]=\n?\.66/,
   false);
 
