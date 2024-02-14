@@ -767,7 +767,7 @@ window.levelEditorMod.runCodeBefore = function() {
     ];
   
     const htmlToInsert = `
-    <div id="place-panel" style="height: 600px; width: 200px; background-color: #bfde80; display: grid; grid-template-columns: 60px 60px 60px; justify-content: space-evenly;box-sizing: border-box; border: 10px solid #507f30;">
+    <div id="place-panel" style="height: 650px; width: 200px; background-color: #bfde80; display: grid; grid-template-columns: 60px 60px 60px; justify-content: space-evenly;box-sizing: border-box; border: 10px solid #507f30;">
       <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v13/trophy_01.png" data-type="-1" data-category="wall">
       <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v13/trophy_09.png" data-type="-1" data-category="box">
       <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(0%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v17/apple_00.png" data-type="0" data-category="apple">
@@ -795,7 +795,7 @@ window.levelEditorMod.runCodeBefore = function() {
       <div id="link-to-preset" style="height: 40px;background-color: #4a752c;grid-column: 1 / 4;font-size: 2em;font-family: 'Roboto';text-align: center;color: white;line-height: 40px;border: 3px solid #bfde80;border-radius: 4px;cursor: pointer;">Presets &gt;</div>
     </div>
   
-    <div id="preset-panel" style="height: 600px; width: 200px; background-color: #bfde80; display: none; grid-template-columns: 60px 60px 60px; justify-content: space-evenly;box-sizing: border-box; border: 10px solid #507f30;">
+    <div id="preset-panel" style="height: 650px; width: 200px; background-color: #bfde80; display: none; grid-template-columns: 60px 60px 60px; justify-content: space-evenly;box-sizing: border-box; border: 10px solid #507f30;">
       <img class="chosen-preset preset-none preset-option" style="width:100%; height:auto; object-fit:cover; cursor:pointer;" draggable="false" src="${rootUrl}none.png">
       <div class="preset-option preset-custom" style="height: 40px;background-color: #2d3f76;grid-column: 2 / 4;font-size: 1.5em;font-family: 'Roboto';text-align: center;color: white;line-height: 40px;cursor: pointer; margin-top:9px;">CUSTOM</div>
       ${presetImages.map(el=>'<img class="preset-option" style="width:100%; height:auto; object-fit:cover; cursor:pointer; image-rendering:pixelated;" draggable="false" src="' + rootUrl + el + '">').join('\n')}
@@ -806,7 +806,7 @@ window.levelEditorMod.runCodeBefore = function() {
     `;
   
     const customPresetHtmlToInsert = `
-      <div id="custom-panel" style="height: 600px; width: 390px; background-color: rgb(191, 222, 128); display: none;box-sizing: border-box; border: 10px solid rgb(80, 127, 48);">
+      <div id="custom-panel" style="height: 650px; width: 390px; background-color: rgb(191, 222, 128); display: none;box-sizing: border-box; border: 10px solid rgb(80, 127, 48);">
       <div style="padding:10px;font-family:'Roboto'">
         <p style="font-size: 1.17em;">Use the editor below to make your own starting pattern. Left click to place an entity, right click to erase.</p>
         <button id="custom-import" style="font-family: 'Roboto';background-color: #2d3f76;color: white;border: none;padding: 7px;border-radius: 2px;cursor: pointer;margin-right: 7px;margin-bottom: 10px">IMPORT</button>
@@ -831,7 +831,7 @@ window.levelEditorMod.runCodeBefore = function() {
       <canvas width="370" height="340" style="margin:3px; border:2px solid #507f30" id="custom-preset-canvas"></canvas>
       </div>
   
-      <div id="challenge-panel" style="height: 600px; width: 390px; background-color: rgb(191, 222, 128); display: none;box-sizing: border-box; border: 10px solid rgb(80, 127, 48);">
+      <div id="challenge-panel" style="height: 650px; width: 390px; background-color: rgb(191, 222, 128); display: none;box-sizing: border-box; border: 10px solid rgb(80, 127, 48);">
       <div style="padding:10px;font-family:'Roboto'">
         <p style="font-size: 1.17em;">Choose level below. These get progressively harder. These should be played with the wall mode setting. Try with the fast speed for an extra challenge!</p>
         <label for="challenge-level">Level: </label>
@@ -989,7 +989,7 @@ window.levelEditorMod.runCodeBefore = function() {
     );
   
     //Adjust style
-    document.getElementsByClassName('FL0z2d iIs7Af')[0].children[0].style.transform = 'rotate(90deg)';
+    document.querySelector('.FL0z2d[jsaction="rxqFXd"]').children[0].children[0].style.transform = 'rotate(90deg)';
   
     //Allow switching tabs with ] key
     document.addEventListener('keydown',(event)=>{if(event.key == ']') {
