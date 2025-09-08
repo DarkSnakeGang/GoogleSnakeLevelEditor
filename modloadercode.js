@@ -1437,4 +1437,5 @@ window.levelEditorMod.runCodeAfter = function() {
   initialiseCanvas();
   otherPresetmanager.loadRandomHams();
   otherPresetmanager.loadChallenge();
+
 }
