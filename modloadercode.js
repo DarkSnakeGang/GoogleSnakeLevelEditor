@@ -56,16 +56,16 @@ window.levelEditorMod.runCodeBefore = function() {
 
   if(isProd) {
     //Live
-    globalThis.rootUrl = 'https://raw.githubusercontent.com/DarkSnakeGang/GoogleSnakeLevelEditor/main/';
+    globalThis.rootUrl = 'https://raw.githubusercontent.com/DarkSnakeGang/GoogleSnakeLevelEditor/v12/';
     globalThis.imagePresetsFolder = 'image-presets/';
-    globalThis.sharedUrl = 'https://raw.githubusercontent.com/DarkSnakeGang/GoogleSnakeLevelEditor/main/shared.js';
-    globalThis.randomHamUrl = 'https://raw.githubusercontent.com/DarkSnakeGang/GoogleSnakeLevelEditor/main/random_ham.txt';
-    globalThis.challengeUrl = 'https://raw.githubusercontent.com/DarkSnakeGang/GoogleSnakeLevelEditor/main/challenge.txt';
+    globalThis.sharedUrl = 'https://raw.githubusercontent.com/DarkSnakeGang/GoogleSnakeLevelEditor/v12/shared.js';
+    globalThis.randomHamUrl = 'https://raw.githubusercontent.com/DarkSnakeGang/GoogleSnakeLevelEditor/v12/random_ham.txt';
+    globalThis.challengeUrl = 'https://raw.githubusercontent.com/DarkSnakeGang/GoogleSnakeLevelEditor/v12/challenge.txt';
   } else {
     //Dev
     globalThis.rootUrl = 'http://localhost:3000/';
     globalThis.imagePresetsFolder = 'presets-windows-symlink/';
-    globalThis.sharedUrl = 'https://raw.githubusercontent.com/DarkSnakeGang/GoogleSnakeLevelEditor/main/shared.js';
+    globalThis.sharedUrl = 'https://raw.githubusercontent.com/DarkSnakeGang/GoogleSnakeLevelEditor/v12/shared.js';
     globalThis.randomHamUrl = 'http://localhost:3000/random_ham.txt';
     globalThis.challengeUrl = 'http://localhost:3000/challenge.txt';
   }
@@ -76,7 +76,6 @@ window.levelEditorMod.runCodeBefore = function() {
   globalThis.disableWallMode = true;//Whether wall mode should place walls every 2 turns
   globalThis.disableAppleInitialSpeed = false;
   globalThis.customSnakeStart = {isActive:false, x:4, y:1};
-  globalThis.hasShownWarnings = {wall: false, sokoban: false};//Whether we have shown the warning about walls/boxes not having collisions without the right mode selected.
   globalThis.customPresetManager = {
     canvasWidth:370,
     canvasHeight:340,
@@ -669,7 +668,10 @@ window.levelEditorMod.runCodeBefore = function() {
       '#F38768',//Peach
       '#C7913C',//Peanut
       '#E74738',//Raspberry
-      '#F24311'//Tomato    
+      '#F24311',//Tomato
+      '#01729E',//Blueberries
+      '#E8B736',//Mango
+      '#AC9F4F'//Avocado
     ];
   
     //For reference - the full color list is
@@ -770,28 +772,30 @@ window.levelEditorMod.runCodeBefore = function() {
     <div id="place-panel" style="height: 650px; width: 200px; background-color: #bfde80; display: grid; grid-template-columns: 60px 60px 60px; justify-content: space-evenly;box-sizing: border-box; border: 10px solid #507f30;">
       <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v13/trophy_01.png" data-type="-1" data-category="wall">
       <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v13/trophy_09.png" data-type="-1" data-category="box">
-      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(0%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v17/apple_00.png" data-type="0" data-category="apple">
-      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v17/apple_01.png" data-type="1" data-category="apple">
-      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v17/apple_02.png" data-type="2" data-category="apple">
-      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v17/apple_03.png" data-type="3" data-category="apple">
-      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v17/apple_04.png" data-type="4" data-category="apple">
-      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v17/apple_05.png" data-type="5" data-category="apple">
-      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v17/apple_06.png" data-type="6" data-category="apple">
-      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v17/apple_07.png" data-type="7" data-category="apple">
-      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v17/apple_08.png" data-type="8" data-category="apple">
-      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v17/apple_09.png" data-type="9" data-category="apple">
-      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v17/apple_10.png" data-type="10" data-category="apple">
-      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v17/apple_11.png" data-type="11" data-category="apple">
-      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v17/apple_12.png" data-type="12" data-category="apple">
-      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v17/apple_13.png" data-type="13" data-category="apple">
-      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v17/apple_14.png" data-type="14" data-category="apple">
-      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v17/apple_15.png" data-type="15" data-category="apple">
-      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v17/apple_16.png" data-type="16" data-category="apple">
-      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v17/apple_17.png" data-type="17" data-category="apple">
-      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v17/apple_18.png" data-type="18" data-category="apple">
-      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v17/apple_19.png" data-type="19" data-category="apple">
-      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v17/apple_20.png" data-type="20" data-category="apple">
-      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v17/apple_21.png" data-type="21" data-category="apple">
+      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(0%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v18/apple_00.png" data-type="0" data-category="apple">
+      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v18/apple_01.png" data-type="1" data-category="apple">
+      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v18/apple_02.png" data-type="2" data-category="apple">
+      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v18/apple_03.png" data-type="3" data-category="apple">
+      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v18/apple_04.png" data-type="4" data-category="apple">
+      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v18/apple_05.png" data-type="5" data-category="apple">
+      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v18/apple_06.png" data-type="6" data-category="apple">
+      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v18/apple_07.png" data-type="7" data-category="apple">
+      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v18/apple_08.png" data-type="8" data-category="apple">
+      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v18/apple_09.png" data-type="9" data-category="apple">
+      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v18/apple_10.png" data-type="10" data-category="apple">
+      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v18/apple_11.png" data-type="11" data-category="apple">
+      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v18/apple_12.png" data-type="12" data-category="apple">
+      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v18/apple_13.png" data-type="13" data-category="apple">
+      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v18/apple_14.png" data-type="14" data-category="apple">
+      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v18/apple_15.png" data-type="15" data-category="apple">
+      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v18/apple_16.png" data-type="16" data-category="apple">
+      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v18/apple_17.png" data-type="17" data-category="apple">
+      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v18/apple_18.png" data-type="18" data-category="apple">
+      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v18/apple_19.png" data-type="19" data-category="apple">
+      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v18/apple_20.png" data-type="20" data-category="apple">
+      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v18/apple_21.png" data-type="21" data-category="apple">
+      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v18/apple_22.png" data-type="22" data-category="apple">
+      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v18/apple_23.png" data-type="23" data-category="apple">
       <div id="link-to-preset" style="height: 40px;background-color: #4a752c;grid-column: 1 / 4;font-size: 2em;font-family: 'Roboto';text-align: center;color: white;line-height: 40px;border: 3px solid #bfde80;border-radius: 4px;cursor: pointer;">Presets &gt;</div>
     </div>
   
@@ -1163,11 +1167,12 @@ window.levelEditorMod.alterSnakeCode = function(code) {
   //Copied from gravity, but adjusted to be global and use code. intead of funcWithEat. and capturing groups adjusted.
   [,globalThis.applePosProperty, globalThis.appleSpeedProperty] = code.assertMatch(/&&\([$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}\.x&&\([$a-zA-Z0-9_]{0,8}\.([$a-zA-Z0-9_]{0,8})\.x\+=[$a-zA-Z0-9_]{0,8}\.([$a-zA-Z0-9_]{0,8})\.x\),/);
 
-  //Lifted from pythag
-  globalThis.bodyArray = code.assertMatch(/[a-z]=\n?this\.[$a-zA-Z0-9_]{0,8}\.([$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8})\[0\]\.clone\(\),"LEFT"/)[1];
+  //Body array path (updated for direction==="LEFT" style comparisons in v12+)
+  globalThis.bodyArray = code.assertMatch(/([$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8})\[0\]\.clone\(\),this\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}\.direction==="LEFT"/)[1];
 
-  globalThis.makeApple = code.assertMatch(/this\.[$a-zA-Z0-9_]{0,8}\.push\(([$a-zA-Z0-9_]{0,8})\(this,-5,-4\)\)/)[1];
-  globalThis.appleArray = code.assertMatch(/this\.([$a-zA-Z0-9_]{0,8})\.push\([$a-zA-Z0-9_]{0,8}\(this,-6,-3\)\)/)[1];
+  //Optional newline between args (v12 apple placement can break across lines)
+  globalThis.makeApple = code.assertMatch(/this\.[$a-zA-Z0-9_]{0,8}\.push\(([$a-zA-Z0-9_]{0,8})\(this,\n?-5,-4\)\)/)[1];
+  globalThis.appleArray = code.assertMatch(/this\.([$a-zA-Z0-9_]{0,8})\.push\([$a-zA-Z0-9_]{0,8}\(this,\n?-6,-3\)\)/)[1];
 
   //whole snake object has an object which in turn has the appleArray. (It's messy I know)
   globalThis.appleArrayHolderOfWholeSnakeObject = code.assertMatch(/this\.([$a-zA-Z0-9_]{0,8})\.reset\(\);this\.[$a-zA-Z0-9_]{0,8}=!1;/)[1];
@@ -1181,10 +1186,15 @@ window.levelEditorMod.alterSnakeCode = function(code) {
   //Checks whether we are playing a specific mode e.g. VK(this.settings,2) is true if we are playing portal
   let [,modeCheck, settingsProperty] = code.assertMatch(/([$a-zA-Z0-9_]{0,8})\(this\.([$a-zA-Z0-9_]{0,8}),6\)/);
 
-  //Set snakeGlobalObject every reset
+  //Mode id property + blender sets (v12: f7 checks settings.ub / settings.ZSa / settings.Qa+Jc)
+  let [, blenderFlagProperty, blenderSetAltProperty, modeIdProperty, blenderSetProperty] = code.assertMatch(
+    /[$a-zA-Z0-9_]{0,8}=function\(a,b\)\{return a\.([$a-zA-Z0-9_]{0,8})\?a\.([$a-zA-Z0-9_]{0,8})\.has\(b\):a\.([$a-zA-Z0-9_]{0,8})===22&&a\.([$a-zA-Z0-9_]{0,8})\.has\(b\)\?!0:a\.[$a-zA-Z0-9_]{0,8}===b\}/
+  );
+
+  //Set snakeGlobalObject every reset (class method form in v12: reset(){...})
   let funcWithReset, funcWithResetOrig;
-  funcWithReset = funcWithResetOrig = findFunctionInCode(code, /[$a-zA-Z0-9_]{0,8}\.reset=function\(\)$/,
-  /[a-z]=\n?\.66/,
+  funcWithReset = funcWithResetOrig = findFunctionInCode(code, /reset\(\)\{$/,
+  /case 1:a=\.66/,
   false);
 
   funcWithReset = assertReplace(funcWithReset,'{','{globalThis.wholeSnakeObject = this;');//This line is changed slightly from varied.js
@@ -1194,10 +1204,10 @@ window.levelEditorMod.alterSnakeCode = function(code) {
 
   code = code.replace(funcWithResetOrig, funcWithReset);
 
-  //Get the object that contains the wholeSnakeObject.
+  //Get the object that contains the wholeSnakeObject. (class method form in v12)
   let funcWithResetState, funcWithResetStateOrig;
-  funcWithResetState = funcWithResetStateOrig = findFunctionInCode(code, /[$a-zA-Z0-9_]{0,8}\.prototype\.resetState=function\(a\)$/,
-  /void 0===[a-z]\?!0:[a-z];this\.[$a-zA-Z0-9_]{0,8}\.reset\(a\);/);
+  funcWithResetState = funcWithResetStateOrig = findFunctionInCode(code, /resetState\(a=!0\)\{$/,
+  /this\.[$a-zA-Z0-9_]{0,8}\.reset\(a\);/);
 
   funcWithResetState = assertReplace(funcWithResetState, '{', '{globalThis.megaWholeSnakeObject = this;');
 
@@ -1228,23 +1238,54 @@ window.levelEditorMod.alterSnakeCode = function(code) {
   }
   `, false);
 
+  //Enable wall (1) / sokoban (9), upgrading to blender (22) when combining modes. Mutates settings in-place (no board wipe).
+  code = appendCodeWithinSnakeModule(code, `
+  globalThis.ensureGameMode = function(modeId) {
+    const settings = window.wholeSnakeObject.${settingsProperty};
+    if(${modeCheck}(settings, modeId)) return;
+
+    if(settings.${blenderFlagProperty}) {
+      settings.${blenderSetAltProperty}.add(modeId);
+      return;
+    }
+
+    if(settings.${modeIdProperty} === 22) {
+      if(!(settings.${blenderSetProperty} instanceof Set)) {
+        settings.${blenderSetProperty} = new Set();
+      }
+      settings.${blenderSetProperty}.add(modeId);
+      return;
+    }
+
+    if(settings.${modeIdProperty} === 0 || settings.${modeIdProperty} === modeId) {
+      settings.${modeIdProperty} = modeId;
+      return;
+    }
+
+    const prev = settings.${modeIdProperty};
+    settings.${modeIdProperty} = 22;
+    if(!(settings.${blenderSetProperty} instanceof Set)) {
+      settings.${blenderSetProperty} = new Set();
+    }
+    settings.${blenderSetProperty}.clear();
+    if(prev !== 0 && prev !== 22) {
+      settings.${blenderSetProperty}.add(prev);
+    }
+    settings.${blenderSetProperty}.add(modeId);
+  }
+  `, false);
+
   let wallDetailsContainer = code.assertMatch(/[$a-zA-Z0-9_]{0,8}&&\([$a-zA-Z0-9_]{0,8}\(this\.([$a-zA-Z0-9_]{0,8}),\n?[$a-zA-Z0-9_]{0,8}\),\n?[$a-zA-Z0-9_]{0,8}\(this\.[$a-zA-Z0-9_]{0,8},7\)/)[1];
 
-  //Setup for being able to place walls
-  //For reference, we are matching the check for placing the "middle" wall in yinyang
-  /*
-  this.yb.push({Jb: a,Wm: !1,vz: -1,DH: !0,Th: !0}),
-  */
-  //let [,placeWallFunc,wallCoordProperty,otherProperty1,fakeWallProperty,otherProperty2] = code.match(/([$a-zA-Z0-9_]{0,8})\(this,[a-z],{([$a-zA-Z0-9_]{0,8}):[a-z],([$a-zA-Z0-9_]{0,8}:!1,[$a-zA-Z0-9_]{0,8}:-1),([$a-zA-Z0-9_]{0,8}):!0,([$a-zA-Z0-9_]{0,8}:!0,[$a-zA-Z0-9_]{0,8}:void 0)}\)/);
-  let [,placeWallFunc,wallCoordProperty,otherProperty1,fakeWallProperty,otherProperty2] = code.assertMatch(/([$a-zA-Z0-9_]{0,8})\(this,[a-z],{([$a-zA-Z0-9_]{0,8}):[a-z],([$a-zA-Z0-9_]{0,8}:!1),([$a-zA-Z0-9_]{0,8}):!0,([$a-zA-Z0-9_]{0,8}:!0)}\)/);
+  //Real wall placer object shape (not yinyang center/fake wall)
+  let [,placeWallFunc,wallCoordProperty,wallSolidProperty,wallFakeProperty,wallAnimProperty] = code.assertMatch(
+    /([$a-zA-Z0-9_]{0,8})\([a-z],[a-z],\{([$a-zA-Z0-9_]{0,8}):[a-z],([$a-zA-Z0-9_]{0,8}):!0,([$a-zA-Z0-9_]{0,8}):!1,([$a-zA-Z0-9_]{0,8}):!/
+  );
 
   //Make a function to place a wall
   code = appendCodeWithinSnakeModule(code, `
   globalThis.placeWall = function(x, y, banNeighbourSpawning = false) {
-    if(!${modeCheck}(window.wholeSnakeObject.${settingsProperty}, 1) && !window.hasShownWarnings.wall) {
-      alert("You must use wall mode for this to work, otherwise you will travel straight through walls. Use blender mode if you want to include other settings. We won't show this message again.");
-      window.hasShownWarnings.wall = true;
-    }
+    window.ensureGameMode(1);
 
     x = Math.round(x);
     y = Math.round(y);
@@ -1252,9 +1293,9 @@ window.levelEditorMod.alterSnakeCode = function(code) {
     ${placeWallFunc}(window.wholeSnakeObject.${wallDetailsContainer}, wallCoord,
       {
         ${wallCoordProperty}: wallCoord,
-        ${otherProperty1},
-        ${fakeWallProperty}: false,
-        ${otherProperty2}
+        ${wallSolidProperty}: true,
+        ${wallFakeProperty}: false,
+        ${wallAnimProperty}: !${modeCheck}(window.wholeSnakeObject.${settingsProperty}, 11)
       }
     );
   }
@@ -1279,7 +1320,6 @@ window.levelEditorMod.alterSnakeCode = function(code) {
 
   let funcWithPlaceWall, funcWithPlaceWallOrig;
   funcWithPlaceWall = funcWithPlaceWallOrig = findFunctionInCode(code, /[$a-zA-Z0-9_]{0,8}=function\(a,\n?b\)$/,
-  ///[$a-zA-Z0-9_]{0,8}\([a-z],[a-z],{[$a-zA-Z0-9_]{0,8}:[a-z],[$a-zA-Z0-9_]{0,8}:!0,[$a-zA-Z0-9_]{0,8}:-1,[$a-zA-Z0-9_]{0,8}:!1,\n?[$a-zA-Z0-9_]{0,8}:![$a-zA-Z0-9_]{0,8}\([a-z]\.settings,11\),[$a-zA-Z0-9_]{0,8}:void 0}\);/,
   /[$a-zA-Z0-9_]{0,8}\([a-z],[a-z],{[$a-zA-Z0-9_]{0,8}:[a-z],[$a-zA-Z0-9_]{0,8}:!0,[$a-zA-Z0-9_]{0,8}:!1,\n?[$a-zA-Z0-9_]{0,8}:![$a-zA-Z0-9_]{0,8}\([a-z]\.[$a-zA-Z0-9_]{0,8},\n?11\)}\);/,
   false);
 
@@ -1302,10 +1342,7 @@ window.levelEditorMod.alterSnakeCode = function(code) {
   //Make a function to place a sokobox
   code = appendCodeWithinSnakeModule(code, `
   globalThis.placeSokobox = function(x,y) {
-    if(!${modeCheck}(window.wholeSnakeObject.${settingsProperty}, 9) && !window.hasShownWarnings.sokoban) {
-      alert("You must use sokoban (box) mode for this to work, otherwise you will travel straight through boxes. Use blender mode if you want to include other settings. We won't show this message again.");
-      window.hasShownWarnings.sokoban = true;
-    }
+    window.ensureGameMode(9);
 
     x = Math.round(x);
     y = Math.round(y);
@@ -1336,10 +1373,10 @@ window.levelEditorMod.alterSnakeCode = function(code) {
   }
   `, false);
 
-  //Allow customising which position the snake starts from
+  //Allow customising which position the snake starts from (class method form in v12)
 
   let funcWithSnakeStartPos, funcWithSnakeStartPosOrig;
-  funcWithSnakeStartPos = funcWithSnakeStartPosOrig = findFunctionInCode(code, /[$a-zA-Z0-9_]{0,8}\.prototype\.reset=function\(\)$/,
+  funcWithSnakeStartPos = funcWithSnakeStartPosOrig = findFunctionInCode(code, /reset\(\)\{$/,
     /this\.[$a-zA-Z0-9_]{0,8}\.push\(new _\.[$a-zA-Z0-9_]{0,8}\(Math\.floor\(this\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}\.width\/4\),Math\.floor\(this\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}\.height\/2\)\)\);/,
     false);
 
@@ -1347,16 +1384,16 @@ window.levelEditorMod.alterSnakeCode = function(code) {
     /this\.([$a-zA-Z0-9_]{0,8})\.push\(new [^]*3,Math\.floor\(this\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}\.height\/\n?2\)\)\);/,
     `setSelectedSnakeHead();
     if(customSnakeStart.isActive) {
-      this.$1.push(new ${window.coordConstructor}(customSnakeStart.x, customSnakeStart.y));
-      this.$1.push(new ${window.coordConstructor}(customSnakeStart.x - 1, customSnakeStart.y));
-      this.$1.push(new ${window.coordConstructor}(customSnakeStart.x - 2, customSnakeStart.y));
-      this.$1.push(new ${window.coordConstructor}(customSnakeStart.x - 3, customSnakeStart.y));
+      this.$1.push(new ${globalThis.coordConstructor}(customSnakeStart.x, customSnakeStart.y));
+      this.$1.push(new ${globalThis.coordConstructor}(customSnakeStart.x - 1, customSnakeStart.y));
+      this.$1.push(new ${globalThis.coordConstructor}(customSnakeStart.x - 2, customSnakeStart.y));
+      this.$1.push(new ${globalThis.coordConstructor}(customSnakeStart.x - 3, customSnakeStart.y));
     } else {$&}`);
 
   code = code.replace(funcWithSnakeStartPosOrig, funcWithSnakeStartPos);
 
-  //Func used to change settings in the menu
-  let funcWithChangeSetting = findFunctionInCode(code, /[$a-zA-Z0-9_]{0,8}=function\(a,b,c,d\)$/,
+  //Func used to change settings in the menu (v12 uses default arg d=-1)
+  let funcWithChangeSetting = findFunctionInCode(code, /[$a-zA-Z0-9_]{0,8}=function\(a,b,c,d=-1\)$/,
   /case "apple":[a-z]\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}=[a-z];break;/,
   false);
 
@@ -1366,9 +1403,9 @@ window.levelEditorMod.alterSnakeCode = function(code) {
   //Menu property - same regex as below
   let menuProperty = code.assertMatch(/if\(this\.([$a-zA-Z0-9_]{0,8})\.isVisible\(\)\|\|this\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}\)/)[1];
 
-  //Func used to do a full reset (simulating click play from menu button?)
-  let funcWithFullReset = findFunctionInCode(code, /[$a-zA-Z0-9_]{0,8}=function\(\)$/,
-  /if\(this\.[$a-zA-Z0-9_]{0,8}\.isVisible\(\)\|\|this\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}\)/,
+  //Func used to do a full reset (class method form in v12)
+  let funcWithFullReset = findFunctionInCode(code, /[$a-zA-Z0-9_]{0,8}\(\)\{$/,
+  /isVisible\(\)\|\|this\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}\)\{if\(this\.settings\./,
   false);
 
   //Just need the name of this function so we can call it.
