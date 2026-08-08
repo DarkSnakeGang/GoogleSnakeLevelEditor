@@ -407,7 +407,7 @@ window.levelEditorMod.runCodeBefore = function() {
       fetch(challengeUrl)
       .then(response=>response.text())
       .then(allChallengeCodes=>{
-        otherPresetmanager.challengeLevelCodes = allChallengeCodes.split('\n');
+        otherPresetmanager.challengeLevelCodes = allChallengeCodes.split('\n').filter(line => line.trim().length > 0);
         otherPresetmanager.isChallengeLoaded = true;
       });
     },
@@ -459,6 +459,34 @@ window.levelEditorMod.runCodeBefore = function() {
 
       return challengePixelList;
     }
+  };
+
+  window.challengeSpeedrunMode = false;
+
+  // Called from the vanilla win path. Returns true if speedrun handled the win (skip end screen).
+  window.tryChallengeSpeedrunAdvance = function(gameState) {
+    if(!window.challengeSpeedrunMode) return false;
+
+    const presetEl = document.getElementsByClassName('chosen-preset')?.[0];
+    if(!presetEl || !presetEl.classList.contains('preset-challenge')) return false;
+
+    const maxLevel = otherPresetmanager.challengeLevelCodes.length || 20;
+    const currentLevel = Number(otherPresetmanager.challengelevel) || 1;
+    if(currentLevel >= maxLevel) return false; // Final level: keep normal win celebration
+
+    const nextLevel = currentLevel + 1;
+    otherPresetmanager.challengelevel = nextLevel;
+    const levelSelect = document.getElementById('challenge-level');
+    if(levelSelect) levelSelect.value = String(nextLevel);
+
+    // Defer reset so we leave the current game tick cleanly; board ends ready to start
+    setTimeout(() => {
+      if(typeof selectNewSizeSettingAndHardReset === 'function') {
+        selectNewSizeSettingAndHardReset(0);
+      }
+    }, 0);
+
+    return true;
   };
 
   window.setPixelData = function(target, url, callback = null) {
@@ -539,6 +567,10 @@ window.levelEditorMod.runCodeBefore = function() {
           throw Error('Unrecognised category!');
       }
       
+    }
+    // Tally count needs sequence numbers on every apple for eat-order + numbering UI
+    if (typeof window.retallyAllPlacedApples === 'function') {
+      window.retallyAllPlacedApples();
     }
   }
   
@@ -708,13 +740,19 @@ window.levelEditorMod.runCodeBefore = function() {
   
   window.placeAppleAtMouse = function(event) {
     let canvasRect = gameCanvasElMakePattern.getBoundingClientRect();
-    const offsetFromBorder = {x:26,y:26};
     if(window.wholeSnakeObject && tileWidth && window.placeApple && window.placeWall && window.placeSokobox) {
       const calculatedTileWidth = eval(`window.wholeSnakeObject.${tileWidth}`);
-      mouseX = event.clientX - canvasRect.left - offsetFromBorder.x - calculatedTileWidth/2;
-      mouseY = event.clientY - canvasRect.top - offsetFromBorder.y - calculatedTileWidth/2;
-      gameCoordX = mouseX / calculatedTileWidth;
-      gameCoordY = mouseY / calculatedTileWidth;
+      // Canvas is CSS-stretched (width/height:100%); convert client pixels -> canvas pixels
+      const scaleX = gameCanvasElMakePattern.width / canvasRect.width;
+      const scaleY = gameCanvasElMakePattern.height / canvasRect.height;
+      // Injected each frame from snake render (board centering within the main canvas)
+      const offsetX = globalThis.leftBorderWidth ?? 0;
+      const offsetY = globalThis.topBorderWidth ?? 0;
+
+      const mouseX = (event.clientX - canvasRect.left) * scaleX - offsetX - calculatedTileWidth / 2;
+      const mouseY = (event.clientY - canvasRect.top) * scaleY - offsetY - calculatedTileWidth / 2;
+      let gameCoordX = mouseX / calculatedTileWidth;
+      let gameCoordY = mouseY / calculatedTileWidth;
   
       switch(mousePlaceMode.category) {
         case 'apple':
@@ -741,7 +779,7 @@ window.levelEditorMod.runCodeBefore = function() {
   window.setupMakePatternHtml = function() {
     //Add message on canvas saying that level editor mod is being used
     let modIndicator = document.createElement('div');
-    modIndicator.style='position:absolute;font-family:roboto;color:white;font-size:14px;padding-top:4px;padding-left:30px;user-select: none;';
+    modIndicator.style='position:absolute;font-family:Arial;color:white;font-size:14px;padding-top:4px;padding-left:30px;user-select: none;';
     modIndicator.textContent = 'Level Editor Mod';
   
     let canvasNode = document.getElementsByClassName('jNB0Ic')[0];
@@ -796,27 +834,27 @@ window.levelEditorMod.runCodeBefore = function() {
       <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v18/apple_21.png" data-type="21" data-category="apple">
       <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v18/apple_22.png" data-type="22" data-category="apple">
       <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v18/apple_23.png" data-type="23" data-category="apple">
-      <div id="link-to-preset" style="height: 40px;background-color: #4a752c;grid-column: 1 / 4;font-size: 2em;font-family: 'Roboto';text-align: center;color: white;line-height: 40px;border: 3px solid #bfde80;border-radius: 4px;cursor: pointer;">Presets &gt;</div>
+      <div id="link-to-preset" style="height: 40px;background-color: #4a752c;grid-column: 1 / 4;font-size: 2em;font-family: Arial;text-align: center;color: white;line-height: 40px;border: 3px solid #bfde80;border-radius: 4px;cursor: pointer;">Presets &gt;</div>
     </div>
   
     <div id="preset-panel" style="height: 650px; width: 200px; background-color: #bfde80; display: none; grid-template-columns: 60px 60px 60px; justify-content: space-evenly;box-sizing: border-box; border: 10px solid #507f30;">
       <img class="chosen-preset preset-none preset-option" style="width:100%; height:auto; object-fit:cover; cursor:pointer;" draggable="false" src="${rootUrl}none.png">
-      <div class="preset-option preset-custom" style="height: 40px;background-color: #2d3f76;grid-column: 2 / 4;font-size: 1.5em;font-family: 'Roboto';text-align: center;color: white;line-height: 40px;cursor: pointer; margin-top:9px;">CUSTOM</div>
+      <div class="preset-option preset-custom" style="height: 40px;background-color: #2d3f76;grid-column: 2 / 4;font-size: 1.5em;font-family: Arial;text-align: center;color: white;line-height: 40px;cursor: pointer; margin-top:9px;">CUSTOM</div>
       ${presetImages.map(el=>'<img class="preset-option" style="width:100%; height:auto; object-fit:cover; cursor:pointer; image-rendering:pixelated;" draggable="false" src="' + rootUrl + el + '">').join('\n')}
-      <div class="preset-option preset-random-ham" style="height: 40px;background-color: #2d3f76;grid-column: 1 / 4;font-size: 1.5em;font-family: 'Roboto';text-align: center;color: white;line-height: 40px;cursor: pointer; margin-top:9px;">RANDOM HAM</div>
-      <div class="preset-option preset-challenge" style="height: 40px;background-color: #2d3f76;grid-column: 1 / 4;font-size: 1.5em;font-family: 'Roboto';text-align: center;color: white;line-height: 40px;cursor: pointer; margin-top:9px;">CHALLENGE</div>
-      <div id="link-to-place" style="height: 40px;background-color: #4a752c;grid-column: 1 / 4;font-size: 2em;font-family: 'Roboto';text-align: center;color: white;line-height: 40px;border: 3px solid #bfde80;border-radius: 4px;cursor: pointer;">&lt; Place</div>
+      <div class="preset-option preset-random-ham" style="height: 40px;background-color: #2d3f76;grid-column: 1 / 4;font-size: 1.5em;font-family: Arial;text-align: center;color: white;line-height: 40px;cursor: pointer; margin-top:9px;">RANDOM HAM</div>
+      <div class="preset-option preset-challenge" style="height: 40px;background-color: #2d3f76;grid-column: 1 / 4;font-size: 1.5em;font-family: Arial;text-align: center;color: white;line-height: 40px;cursor: pointer; margin-top:9px;">CHALLENGE</div>
+      <div id="link-to-place" style="height: 40px;background-color: #4a752c;grid-column: 1 / 4;font-size: 2em;font-family: Arial;text-align: center;color: white;line-height: 40px;border: 3px solid #bfde80;border-radius: 4px;cursor: pointer;">&lt; Place</div>
     </div>
     `;
   
     const customPresetHtmlToInsert = `
       <div id="custom-panel" style="height: 650px; width: 390px; background-color: rgb(191, 222, 128); display: none;box-sizing: border-box; border: 10px solid rgb(80, 127, 48);">
-      <div style="padding:10px;font-family:'Roboto'">
+      <div style="padding:10px;font-family:Arial">
         <p style="font-size: 1.17em;">Use the editor below to make your own starting pattern. Left click to place an entity, right click to erase.</p>
-        <button id="custom-import" style="font-family: 'Roboto';background-color: #2d3f76;color: white;border: none;padding: 7px;border-radius: 2px;cursor: pointer;margin-right: 7px;margin-bottom: 10px">IMPORT</button>
-        <button id="custom-export" style="font-family: 'Roboto';background-color: #2d3f76;color: white;border: none;padding: 7px;border-radius: 2px;cursor: pointer;margin-right: 7px;margin-bottom: 10px">EXPORT</button>
-        <button id="custom-clear" style="font-family: 'Roboto';background-color: #b41111;color: white;border: none;padding: 7px;border-radius: 2px;cursor: pointer;margin-right: 7px;margin-bottom: 10px">CLEAR ALL</button>
-        <button id="custom-refresh" style="font-family: 'Roboto';background-color: #027400;color: white;border: none;padding: 7px;border-radius: 2px;cursor: pointer;margin-right: 7px;margin-bottom: 10px">REFRESH</button>
+        <button id="custom-import" style="font-family: Arial;background-color: #2d3f76;color: white;border: none;padding: 7px;border-radius: 2px;cursor: pointer;margin-right: 7px;margin-bottom: 10px">IMPORT</button>
+        <button id="custom-export" style="font-family: Arial;background-color: #2d3f76;color: white;border: none;padding: 7px;border-radius: 2px;cursor: pointer;margin-right: 7px;margin-bottom: 10px">EXPORT</button>
+        <button id="custom-clear" style="font-family: Arial;background-color: #b41111;color: white;border: none;padding: 7px;border-radius: 2px;cursor: pointer;margin-right: 7px;margin-bottom: 10px">CLEAR ALL</button>
+        <button id="custom-refresh" style="font-family: Arial;background-color: #027400;color: white;border: none;padding: 7px;border-radius: 2px;cursor: pointer;margin-right: 7px;margin-bottom: 10px">REFRESH</button>
         <br><label for="custom-map-size">Map Size: </label>
         <select name="map-size" id="custom-map-size" style="margin-bottom:4px">
           <option value="standard">Standard</option>
@@ -836,7 +874,7 @@ window.levelEditorMod.runCodeBefore = function() {
       </div>
   
       <div id="challenge-panel" style="height: 650px; width: 390px; background-color: rgb(191, 222, 128); display: none;box-sizing: border-box; border: 10px solid rgb(80, 127, 48);">
-      <div style="padding:10px;font-family:'Roboto'">
+      <div style="padding:10px;font-family:Arial">
         <p style="font-size: 1.17em;">Choose level below. These get progressively harder. These should be played with the wall mode setting. Try with the fast speed for an extra challenge!</p>
         <label for="challenge-level">Level: </label>
         <select name="challenge-level" id="challenge-level">
@@ -861,6 +899,11 @@ window.levelEditorMod.runCodeBefore = function() {
           <option value="19">19</option>
           <option value="20">20</option>
         </select>
+        <label for="challenge-speedrun-mode" style="display:flex;align-items:center;gap:8px;margin-top:12px;cursor:pointer;user-select:none;">
+          <input type="checkbox" id="challenge-speedrun-mode" style="width:16px;height:16px;cursor:pointer;">
+          Speedrun mode
+        </label>
+        <p style="font-size:0.95em;margin:6px 0 0 0;opacity:0.85;">Finish a level to instantly load the next one, ready to start.</p>
       </div>
       </div>
     `;
@@ -1092,11 +1135,21 @@ window.levelEditorMod.runCodeBefore = function() {
       const standardBoardSize = 0;
       selectNewSizeSettingAndHardReset(standardBoardSize);
     });
+
+    document.getElementById('challenge-speedrun-mode').addEventListener('change', function(){
+      window.challengeSpeedrunMode = this.checked;
+    });
   
     //Set up CSS
     const css = `.chosen-preset {
       outline: 3px solid yellow;
       z-index: 1;
+    }
+    #place-panel, #preset-panel, #custom-panel, #challenge-panel,
+    #place-panel *, #preset-panel *, #custom-panel *, #challenge-panel *,
+    #custom-export-dialogue-container, #custom-export-dialogue-container *,
+    #custom-export-dialogue, #custom-export-dialogue * {
+      font-family: Arial, sans-serif !important;
     }`;
     document.getElementsByTagName('style')[0].innerHTML = document.getElementsByTagName('style')[0].innerHTML + css;
   
@@ -1177,6 +1230,14 @@ window.levelEditorMod.alterSnakeCode = function(code) {
   //whole snake object has an object which in turn has the appleArray. (It's messy I know)
   globalThis.appleArrayHolderOfWholeSnakeObject = code.assertMatch(/this\.([$a-zA-Z0-9_]{0,8})\.reset\(\);this\.[$a-zA-Z0-9_]{0,8}=!1;/)[1];
 
+  // Tally count (count menu value 6) copies into settings.ka for gameplay; kaF assigns sequenceNumber
+  globalThis.tallyAssignSequencesFunc = code.assertMatch(
+    /([$a-zA-Z0-9_]{0,8})=function\(a\)\{a\.wa=1;if\([$a-zA-Z0-9_]{0,8}\(a\.settings\)\)/
+  )[1];
+  let [, tallyCountGameplayProperty, tallyCountMenuProperty] = code.assertMatch(
+    /[a-z]\.([$a-zA-Z0-9_]{0,8})=[a-z]\.([$a-zA-Z0-9_]{0,8});[a-z]\.yb=[a-z]\.Na;/
+  );
+
   //globalThis.coordConstructor = swapInSnakeGlobal(code.assertMatch(/new (_\.[$a-zA-Z0-9_]{0,8})\(1,1\)/)[1]);
   globalThis.coordConstructor = code.assertMatch(/new (_\.[$a-zA-Z0-9_]{0,8})\(1,1\)/)[1];
 
@@ -1213,6 +1274,24 @@ window.levelEditorMod.alterSnakeCode = function(code) {
 
   code = code.replace(funcWithResetStateOrig, funcWithResetState);
 
+  // Speedrun mode: intercept level-clear win so challenge can auto-advance
+  code = assertReplace(code,
+    /if\(odF\(this\)===0\)\{([$a-zA-Z0-9_]{0,8})\.WIN\.play\(\);this\.([$a-zA-Z0-9_]{0,8})=this\.([$a-zA-Z0-9_]{0,8})=!0;([$a-zA-Z0-9_]{0,8})\(this\.menu,1400,this\.Oh\);([\s\S]*?)this\.Mb=this\.ticks\}else if/,
+    'if(odF(this)===0){if(window.tryChallengeSpeedrunAdvance&&window.tryChallengeSpeedrunAdvance(this)){this.$2=this.$3=!0;}else{$1.WIN.play();this.$2=this.$3=!0;$4(this.menu,1400,this.Oh);$5this.Mb=this.ticks}}else if'
+  );
+
+  // Track where the board is drawn inside the main canvas (for accurate mouse placing).
+  // Classic / wall: board bitmap is centered on the context canvas.
+  code = assertReplace(code,
+    /let ([$a-zA-Z0-9_]{0,8})=Math\.round\(\(this\.context\.canvas\.width-this\.[$a-zA-Z0-9_]{0,8}\.canvas\.width\)\/2\),([$a-zA-Z0-9_]{0,8})=Math\.round\(\(this\.context\.canvas\.height-this\.[$a-zA-Z0-9_]{0,8}\.canvas\.height\)\/\n?2\);/,
+    '$&globalThis.leftBorderWidth=$1;globalThis.topBorderWidth=$2;'
+  );
+  // Borderless: board is drawn at (Wd,$d) with a 2-tile content translate.
+  code = assertReplace(code,
+    /let ([$a-zA-Z0-9_]{0,8})=([$a-zA-Z0-9_]{0,8})-([$a-zA-Z0-9_]{0,8}),(\$d)=([$a-zA-Z0-9_]{0,8})-([$a-zA-Z0-9_]{0,8});this\.context\.drawImage\(this\.[$a-zA-Z0-9_]{0,8}\.canvas,\1,\4\)/,
+    '$&;globalThis.leftBorderWidth=$1+Nd+2*this.wb.ka.ka;globalThis.topBorderWidth=$4+he+2*this.wb.ka.ka;'
+  );
+
   ///////////////////////////////////////
   //Taken from level-editor.js
   ///////////////////////////////////////
@@ -1226,6 +1305,41 @@ window.levelEditorMod.alterSnakeCode = function(code) {
 
   //Make a function to place an apple
   code = appendCodeWithinSnakeModule(code, `
+  globalThis.isTallyCountMode = function() {
+    const settings = window.wholeSnakeObject && window.wholeSnakeObject.${settingsProperty};
+    return !!(settings && (settings.${tallyCountGameplayProperty} === 6 || settings.${tallyCountMenuProperty} === 6));
+  };
+
+  // Re-run vanilla tally sequencing after bulk places (presets / import / refresh)
+  globalThis.retallyAllPlacedApples = function() {
+    if(!window.wholeSnakeObject || !isTallyCountMode()) return;
+    const appleManager = window.wholeSnakeObject.${appleArrayHolderOfWholeSnakeObject};
+    if(!appleManager || !appleManager.${appleArray} || appleManager.${appleArray}.length === 0) return;
+    ${tallyAssignSequencesFunc}(appleManager);
+    appleManager.Ca = false;
+  };
+
+  // Mouse-place: append as the next tally target without reshuffling existing apples
+  globalThis.assignTallySequenceToNewApple = function(apple) {
+    if(!window.wholeSnakeObject || !isTallyCountMode() || !apple) return;
+    const appleManager = window.wholeSnakeObject.${appleArrayHolderOfWholeSnakeObject};
+    const apples = appleManager.${appleArray};
+    let maxSeq = 0;
+    for(const other of apples) {
+      if(other !== apple && typeof other.sequenceNumber === 'number' && other.sequenceNumber > maxSeq) {
+        maxSeq = other.sequenceNumber;
+      }
+    }
+    apple.sequenceNumber = maxSeq + 1;
+    if(typeof appleManager.wa !== 'number' || appleManager.wa < 1) {
+      appleManager.wa = 1;
+    }
+    // Match kaF's yin-yang visibility rule
+    if(${modeCheck}(appleManager.settings, 11)) {
+      apple.Gh = apple.sequenceNumber % 2 === 1;
+    }
+  };
+
   globalThis.placeApple = function(x,y,type,initialSpeed=undefined,customProperties={}) {
     let apple = ${makeApple}(window.wholeSnakeObject.${appleArrayHolderOfWholeSnakeObject}, x, y);
     apple.type = type;
@@ -1235,6 +1349,7 @@ window.levelEditorMod.alterSnakeCode = function(code) {
     }
     Object.assign(apple, customProperties);
     window.wholeSnakeObject.${appleArrayHolderOfWholeSnakeObject}.${appleArray}.push(apple);
+    assignTallySequenceToNewApple(apple);
   }
   `, false);
 
@@ -1293,7 +1408,8 @@ window.levelEditorMod.alterSnakeCode = function(code) {
     ${placeWallFunc}(window.wholeSnakeObject.${wallDetailsContainer}, wallCoord,
       {
         ${wallCoordProperty}: wallCoord,
-        ${wallSolidProperty}: true,
+        // Cm:false => render at full size immediately (Cm:true scales with the board intro animation)
+        ${wallSolidProperty}: false,
         ${wallFakeProperty}: false,
         ${wallAnimProperty}: !${modeCheck}(window.wholeSnakeObject.${settingsProperty}, 11)
       }

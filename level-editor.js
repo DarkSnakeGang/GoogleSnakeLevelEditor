@@ -830,11 +830,15 @@ function rgbToHex(r, g, b) {
 
 function placeAppleAtMouse(event) {
   let canvasRect = gameCanvasElMakePattern.getBoundingClientRect();
-  const offsetFromBorder = {x:26,y:26};
   if(wholeSnakeObject && tileWidth && placeApple && placeWall && placeSokobox) {
     const calculatedTileWidth = eval(`wholeSnakeObject.${tileWidth}`);
-    mouseX = event.clientX - canvasRect.left - offsetFromBorder.x - calculatedTileWidth/2;
-    mouseY = event.clientY - canvasRect.top - offsetFromBorder.y - calculatedTileWidth/2;
+    const scaleX = gameCanvasElMakePattern.width / canvasRect.width;
+    const scaleY = gameCanvasElMakePattern.height / canvasRect.height;
+    const offsetX = globalThis.leftBorderWidth ?? 0;
+    const offsetY = globalThis.topBorderWidth ?? 0;
+
+    mouseX = (event.clientX - canvasRect.left) * scaleX - offsetX - calculatedTileWidth / 2;
+    mouseY = (event.clientY - canvasRect.top) * scaleY - offsetY - calculatedTileWidth / 2;
     gameCoordX = mouseX / calculatedTileWidth;
     gameCoordY = mouseY / calculatedTileWidth;
 
@@ -863,7 +867,7 @@ function placeAppleAtMouse(event) {
 function setupMakePatternHtml() {
   //Add message on canvas saying that level editor mod is being used
   let modIndicator = document.createElement('div');
-  modIndicator.style='position:absolute;font-family:roboto;color:white;font-size:14px;padding-top:4px;padding-left:30px;user-select: none;';
+  modIndicator.style='position:absolute;font-family:Arial;color:white;font-size:14px;padding-top:4px;padding-left:30px;user-select: none;';
   modIndicator.textContent = 'Level Editor Mod';
 
   let canvasNode = document.getElementsByClassName('jNB0Ic')[0];
@@ -915,27 +919,27 @@ function setupMakePatternHtml() {
     <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="/logos/fnbx/snake_arcade/v4/apple_18.png" data-type="18" data-category="apple">
     <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="/logos/fnbx/snake_arcade/v4/apple_19.png" data-type="19" data-category="apple">
     <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="/logos/fnbx/snake_arcade/v4/apple_20.png" data-type="20" data-category="apple">
-    <div id="link-to-preset" style="height: 40px;background-color: #4a752c;grid-column: 1 / 4;font-size: 2em;font-family: 'Roboto';text-align: center;color: white;line-height: 40px;border: 3px solid #bfde80;border-radius: 4px;cursor: pointer;">Presets &gt;</div>
+    <div id="link-to-preset" style="height: 40px;background-color: #4a752c;grid-column: 1 / 4;font-size: 2em;font-family: Arial;text-align: center;color: white;line-height: 40px;border: 3px solid #bfde80;border-radius: 4px;cursor: pointer;">Presets &gt;</div>
   </div>
 
   <div id="preset-panel" style="height: 600px; width: 200px; background-color: #bfde80; display: none; grid-template-columns: 60px 60px 60px; justify-content: space-evenly;box-sizing: border-box; border: 10px solid #507f30;">
     <img class="chosen-preset preset-none preset-option" style="width:100%; height:auto; object-fit:cover; cursor:pointer;" draggable="false" src="${rootUrl}none.png">
-    <div class="preset-option preset-custom" style="height: 40px;background-color: #2d3f76;grid-column: 2 / 4;font-size: 1.5em;font-family: 'Roboto';text-align: center;color: white;line-height: 40px;cursor: pointer; margin-top:9px;">CUSTOM</div>
+    <div class="preset-option preset-custom" style="height: 40px;background-color: #2d3f76;grid-column: 2 / 4;font-size: 1.5em;font-family: Arial;text-align: center;color: white;line-height: 40px;cursor: pointer; margin-top:9px;">CUSTOM</div>
     ${presetImages.map(el=>'<img class="preset-option" style="width:100%; height:auto; object-fit:cover; cursor:pointer; image-rendering:pixelated;" draggable="false" src="' + rootUrl + el + '">').join('\n')}
-    <div class="preset-option preset-random-ham" style="height: 40px;background-color: #2d3f76;grid-column: 1 / 4;font-size: 1.5em;font-family: 'Roboto';text-align: center;color: white;line-height: 40px;cursor: pointer; margin-top:9px;">RANDOM HAM</div>
-    <div class="preset-option preset-challenge" style="height: 40px;background-color: #2d3f76;grid-column: 1 / 4;font-size: 1.5em;font-family: 'Roboto';text-align: center;color: white;line-height: 40px;cursor: pointer; margin-top:9px;">CHALLENGE</div>
-    <div id="link-to-place" style="height: 40px;background-color: #4a752c;grid-column: 1 / 4;font-size: 2em;font-family: 'Roboto';text-align: center;color: white;line-height: 40px;border: 3px solid #bfde80;border-radius: 4px;cursor: pointer;">&lt; Place</div>
+    <div class="preset-option preset-random-ham" style="height: 40px;background-color: #2d3f76;grid-column: 1 / 4;font-size: 1.5em;font-family: Arial;text-align: center;color: white;line-height: 40px;cursor: pointer; margin-top:9px;">RANDOM HAM</div>
+    <div class="preset-option preset-challenge" style="height: 40px;background-color: #2d3f76;grid-column: 1 / 4;font-size: 1.5em;font-family: Arial;text-align: center;color: white;line-height: 40px;cursor: pointer; margin-top:9px;">CHALLENGE</div>
+    <div id="link-to-place" style="height: 40px;background-color: #4a752c;grid-column: 1 / 4;font-size: 2em;font-family: Arial;text-align: center;color: white;line-height: 40px;border: 3px solid #bfde80;border-radius: 4px;cursor: pointer;">&lt; Place</div>
   </div>
   `;
 
   const customPresetHtmlToInsert = `
     <div id="custom-panel" style="height: 600px; width: 390px; background-color: rgb(191, 222, 128); display: none;box-sizing: border-box; border: 10px solid rgb(80, 127, 48);">
-    <div style="padding:10px;font-family:'Roboto'">
+    <div style="padding:10px;font-family:Arial">
       <p style="font-size: 1.17em;">Use the editor below to make your own starting pattern. Left click to place an entity, right click to erase.</p>
-      <button id="custom-import" style="font-family: 'Roboto';background-color: #2d3f76;color: white;border: none;padding: 7px;border-radius: 2px;cursor: pointer;margin-right: 7px;margin-bottom: 10px">IMPORT</button>
-      <button id="custom-export" style="font-family: 'Roboto';background-color: #2d3f76;color: white;border: none;padding: 7px;border-radius: 2px;cursor: pointer;margin-right: 7px;margin-bottom: 10px">EXPORT</button>
-      <button id="custom-clear" style="font-family: 'Roboto';background-color: #b41111;color: white;border: none;padding: 7px;border-radius: 2px;cursor: pointer;margin-right: 7px;margin-bottom: 10px">CLEAR ALL</button>
-      <button id="custom-refresh" style="font-family: 'Roboto';background-color: #027400;color: white;border: none;padding: 7px;border-radius: 2px;cursor: pointer;margin-right: 7px;margin-bottom: 10px">REFRESH</button>
+      <button id="custom-import" style="font-family: Arial;background-color: #2d3f76;color: white;border: none;padding: 7px;border-radius: 2px;cursor: pointer;margin-right: 7px;margin-bottom: 10px">IMPORT</button>
+      <button id="custom-export" style="font-family: Arial;background-color: #2d3f76;color: white;border: none;padding: 7px;border-radius: 2px;cursor: pointer;margin-right: 7px;margin-bottom: 10px">EXPORT</button>
+      <button id="custom-clear" style="font-family: Arial;background-color: #b41111;color: white;border: none;padding: 7px;border-radius: 2px;cursor: pointer;margin-right: 7px;margin-bottom: 10px">CLEAR ALL</button>
+      <button id="custom-refresh" style="font-family: Arial;background-color: #027400;color: white;border: none;padding: 7px;border-radius: 2px;cursor: pointer;margin-right: 7px;margin-bottom: 10px">REFRESH</button>
       <br><label for="custom-map-size">Map Size: </label>
       <select name="map-size" id="custom-map-size" style="margin-bottom:4px">
         <option value="standard">Standard</option>
@@ -955,7 +959,7 @@ function setupMakePatternHtml() {
     </div>
 
     <div id="challenge-panel" style="height: 600px; width: 390px; background-color: rgb(191, 222, 128); display: none;box-sizing: border-box; border: 10px solid rgb(80, 127, 48);">
-    <div style="padding:10px;font-family:'Roboto'">
+    <div style="padding:10px;font-family:Arial">
       <p style="font-size: 1.17em;">Choose level below. These get progressively harder. These should be played with the wall mode setting. Try with the fast speed for an extra challenge!</p>
       <label for="challenge-level">Level: </label>
       <select name="challenge-level" id="challenge-level">
@@ -1224,6 +1228,12 @@ function setupMakePatternHtml() {
   const css = `.chosen-preset {
     outline: 3px solid yellow;
     z-index: 1;
+  }
+  #place-panel, #preset-panel, #custom-panel, #challenge-panel,
+  #place-panel *, #preset-panel *, #custom-panel *, #challenge-panel *,
+  #custom-export-dialogue-container, #custom-export-dialogue-container *,
+  #custom-export-dialogue, #custom-export-dialogue * {
+    font-family: Arial, sans-serif !important;
   }`;
   document.getElementsByTagName('style')[0].innerHTML = document.getElementsByTagName('style')[0].innerHTML + css;
 
