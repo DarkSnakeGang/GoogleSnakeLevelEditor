@@ -52,6 +52,8 @@ $checks = @(
   @{ Name = "makeApple_-5_-4"; Pattern = 'this\.[$a-zA-Z0-9_]{0,8}\.push\(([$a-zA-Z0-9_]{0,8})\(this,\n?-5,-4\)\)'; Min = 1; Max = 1; Multiline = $true },
   @{ Name = "appleArray_-6_-3"; Pattern = 'this\.([$a-zA-Z0-9_]{0,8})\.push\([$a-zA-Z0-9_]{0,8}\(this,\n?-6,-3\)\)'; Min = 1; Max = 1; Multiline = $true },
   @{ Name = "appleArrayHolder_reset"; Pattern = 'this\.([$a-zA-Z0-9_]{0,8})\.reset\(\);this\.[$a-zA-Z0-9_]{0,8}=!1;'; Min = 1; Max = 3 },
+  @{ Name = "tallyCopy_ka_Ca_yb"; Pattern = '[a-z]\.([$a-zA-Z0-9_]{0,8})=[a-z]\.([$a-zA-Z0-9_]{0,8});[a-z]\.yb=[a-z]\.[$a-zA-Z0-9_]{0,8};'; Min = 1; Max = 1 },
+  @{ Name = "tallyVisible_seq"; Pattern = 'sequenceNumber!==void 0&&\([a-z]\.([$a-zA-Z0-9_]{0,8})=[a-z]\.sequenceNumber%'; Min = 1; Max = 3 },
   @{ Name = "coordConstructor_1_1"; Pattern = 'new (_\.[$a-zA-Z0-9_]{0,8})\(1,1\)'; Min = 1; Max = 5 },
   @{ Name = "boardDimensions"; Pattern = 'x===Math.floor\([a-z]\.[$a-zA-Z0-9_]{0,8}\.([$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8})\.width\/2\)&&'; Min = 1; Max = 1 },
   @{ Name = "modeCheck_settings_6"; Pattern = '([$a-zA-Z0-9_]{0,8})\(this\.([$a-zA-Z0-9_]{0,8}),6\)'; Min = 1; Max = 20 },
@@ -60,10 +62,14 @@ $checks = @(
   @{ Name = "board_reset_method"; Pattern = 'reset\(\)\{this\.[$a-zA-Z0-9_]{0,8}=null;this\.[$a-zA-Z0-9_]{0,8}\.reset\(\)'; Min = 1; Max = 1 },
   @{ Name = "afterReset_end"; Pattern = '[$a-zA-Z0-9_]{0,8}\([a-z]\.[$a-zA-Z0-9_]{0,8}\)&&\([a-z]\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}=!0\)\)'; Min = 1; Max = 3 },
   @{ Name = "resetState_class"; Pattern = 'resetState\(a=!0\)\{this\.[$a-zA-Z0-9_]{0,8}\.reset\(a\);'; Min = 1; Max = 1 },
-  @{ Name = "wallDetailsContainer"; Pattern = '[$a-zA-Z0-9_]{0,8}&&\([$a-zA-Z0-9_]{0,8}\(this\.([$a-zA-Z0-9_]{0,8}),\n?[$a-zA-Z0-9_]{0,8}\),\n?[$a-zA-Z0-9_]{0,8}\(this\.[$a-zA-Z0-9_]{0,8},7\)'; Min = 1; Max = 1; Multiline = $true },
+  @{ Name = "win_all_apples"; Pattern = 'if\([$a-zA-Z0-9_]{0,8}\(this\)===0\)\{[$a-zA-Z0-9_]{0,8}\.WIN\.play\(\);this\.[$a-zA-Z0-9_]{0,8}=this\.[$a-zA-Z0-9_]{0,8}=!0;[$a-zA-Z0-9_]{0,8}\(this\.menu,1400,this\.[$a-zA-Z0-9_]{0,8}\)'; Min = 1; Max = 1 },
+  @{ Name = "classic_canvas_center"; Pattern = 'let ([$a-zA-Z0-9_]{0,8})=Math\.round\(\(this\.context\.canvas\.width-this\.[$a-zA-Z0-9_]{0,8}\.canvas\.width\)\/2\),([$a-zA-Z0-9_]{0,8})=Math\.round\(\(this\.context\.canvas\.height-this\.[$a-zA-Z0-9_]{0,8}\.canvas\.height\)\/\n?2\);'; Min = 1; Max = 1; Multiline = $true },
+  @{ Name = "borderless_board_offset"; Pattern = '([$a-zA-Z0-9_]{0,8})=[$a-zA-Z0-9_]{0,8}\?-\(this\.wb\.ka\.Aa\.x\*this\.wb\.ka\.ka\)\/2:Math\.round\(this\.ka\.canvas\.width\/2-this\.wb\.oa\.[$a-zA-Z0-9_]{0,8}\.x-this\.wb\.ka\.ka\*2\),([$a-zA-Z0-9_]{0,8})='; Min = 1; Max = 1 },
+  @{ Name = "borderless_draw_offset"; Pattern = 'let ([$a-zA-Z0-9_]{0,8})=([$a-zA-Z0-9_]{0,8})-([$a-zA-Z0-9_]{0,8}),([$a-zA-Z0-9_]{0,8})=([$a-zA-Z0-9_]{0,8})-([$a-zA-Z0-9_]{0,8});this\.context\.drawImage\(this\.[$a-zA-Z0-9_]{0,8}\.canvas,\1,\4\)'; Min = 1; Max = 1; Multiline = $true },
+  @{ Name = "wallDetailsContainer"; Pattern = '[$a-zA-Z0-9_]{0,8}\((?:this|[a-z])\.([$a-zA-Z0-9_]{0,8}),[a-z]\),[$a-zA-Z0-9_]{0,8}\((?:this|[a-z])\.[$a-zA-Z0-9_]{0,8},7\)'; Min = 1; Max = 2 },
   @{ Name = "real_wall_object"; Pattern = '([$a-zA-Z0-9_]{0,8})\([a-z],[a-z],\{([$a-zA-Z0-9_]{0,8}):[a-z],([$a-zA-Z0-9_]{0,8}):!0,([$a-zA-Z0-9_]{0,8}):!1,([$a-zA-Z0-9_]{0,8}):!'; Min = 1; Max = 2 },
   @{ Name = "placeWall_IcF_body"; Pattern = '[$a-zA-Z0-9_]{0,8}\([a-z],[a-z],\{[$a-zA-Z0-9_]{0,8}:[a-z],[$a-zA-Z0-9_]{0,8}:!0,[$a-zA-Z0-9_]{0,8}:!1,\n?[$a-zA-Z0-9_]{0,8}:![$a-zA-Z0-9_]{0,8}\([a-z]\.[$a-zA-Z0-9_]{0,8},\n?11\)\}'; Min = 1; Max = 1; Multiline = $true },
-  @{ Name = "soko_container"; Pattern = 'this\.([$a-zA-Z0-9_]{0,8})\.reset\(\);if\([$a-zA-Z0-9_]{0,8}\(this\.[$a-zA-Z0-9_]{0,8},8\)'; Min = 1; Max = 1 },
+  @{ Name = "soko_container"; Pattern = 'this\.([$a-zA-Z0-9_]{0,8})\.reset\(\);\n?if\([$a-zA-Z0-9_]{0,8}\(this\.[$a-zA-Z0-9_]{0,8},8\)'; Min = 1; Max = 1; Multiline = $true },
   @{ Name = "addSokobox"; Pattern = '([$a-zA-Z0-9_]{0,8})\([a-z],\{([$a-zA-Z0-9_]{0,8}):[a-z],\n?([$a-zA-Z0-9_]{0,8}):null,([$a-zA-Z0-9_]{0,8}):!0,([$a-zA-Z0-9_]{0,8}):[a-z]\}'; Min = 1; Max = 2; Multiline = $true },
   @{ Name = "sokoboxSet_mode16"; Pattern = '[a-z]\.([$a-zA-Z0-9_]{0,8})\.add\([a-z]\);[$a-zA-Z0-9_]{0,8}\([a-z]\.settings,16\)'; Min = 1; Max = 1 },
   @{ Name = "sokogoalSet"; Pattern = '[$a-zA-Z0-9_]{0,8}\([a-z]\.[$a-zA-Z0-9_]{0,8},\n?7\)&&[a-z]\.([$a-zA-Z0-9_]{0,8})\.add\([$a-zA-Z0-9_]{0,8}\([a-z]\.[$a-zA-Z0-9_]{0,8},\n?[a-z]\)\),'; Min = 1; Max = 1; Multiline = $true },
@@ -101,7 +107,7 @@ function Test-ModContains([string]$Name, [string]$Needle) {
 }
 
 Write-Host "`n--- modloadercode.js static checks ---"
-if (-not (Test-ModContains "rootUrl_v12" "GoogleSnakeLevelEditor/v12/")) { $failed++ }
+if (-not (Test-ModContains "rootUrl_v13" "GoogleSnakeLevelEditor/v13/")) { $failed++ }
 if (-not (Test-ModContains "ensureGameMode" "ensureGameMode")) { $failed++ }
 if (-not (Test-ModContains "apple_22_mango" 'data-type="22"')) { $failed++ }
 if (-not (Test-ModContains "apple_23_avocado" 'data-type="23"')) { $failed++ }

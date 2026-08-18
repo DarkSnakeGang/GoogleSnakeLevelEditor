@@ -56,16 +56,16 @@ window.levelEditorMod.runCodeBefore = function() {
 
   if(isProd) {
     //Live
-    globalThis.rootUrl = 'https://raw.githubusercontent.com/DarkSnakeGang/GoogleSnakeLevelEditor/v12/';
+    globalThis.rootUrl = 'https://raw.githubusercontent.com/DarkSnakeGang/GoogleSnakeLevelEditor/v13/';
     globalThis.imagePresetsFolder = 'image-presets/';
-    globalThis.sharedUrl = 'https://raw.githubusercontent.com/DarkSnakeGang/GoogleSnakeLevelEditor/v12/shared.js';
-    globalThis.randomHamUrl = 'https://raw.githubusercontent.com/DarkSnakeGang/GoogleSnakeLevelEditor/v12/random_ham.txt';
-    globalThis.challengeUrl = 'https://raw.githubusercontent.com/DarkSnakeGang/GoogleSnakeLevelEditor/v12/challenge.txt';
+    globalThis.sharedUrl = 'https://raw.githubusercontent.com/DarkSnakeGang/GoogleSnakeLevelEditor/v13/shared.js';
+    globalThis.randomHamUrl = 'https://raw.githubusercontent.com/DarkSnakeGang/GoogleSnakeLevelEditor/v13/random_ham.txt';
+    globalThis.challengeUrl = 'https://raw.githubusercontent.com/DarkSnakeGang/GoogleSnakeLevelEditor/v13/challenge.txt';
   } else {
     //Dev
     globalThis.rootUrl = 'http://localhost:3000/';
     globalThis.imagePresetsFolder = 'presets-windows-symlink/';
-    globalThis.sharedUrl = 'https://raw.githubusercontent.com/DarkSnakeGang/GoogleSnakeLevelEditor/v12/shared.js';
+    globalThis.sharedUrl = 'https://raw.githubusercontent.com/DarkSnakeGang/GoogleSnakeLevelEditor/v13/shared.js';
     globalThis.randomHamUrl = 'http://localhost:3000/random_ham.txt';
     globalThis.challengeUrl = 'http://localhost:3000/challenge.txt';
   }
@@ -808,8 +808,8 @@ window.levelEditorMod.runCodeBefore = function() {
   
     const htmlToInsert = `
     <div id="place-panel" style="height: 650px; width: 200px; background-color: #bfde80; display: grid; grid-template-columns: 60px 60px 60px; justify-content: space-evenly;box-sizing: border-box; border: 10px solid #507f30;">
-      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v13/trophy_01.png" data-type="-1" data-category="wall">
-      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v13/trophy_09.png" data-type="-1" data-category="box">
+      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v22/trophy_01.png" data-type="-1" data-category="wall">
+      <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v22/trophy_09.png" data-type="-1" data-category="box">
       <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(0%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v18/apple_00.png" data-type="0" data-category="apple">
       <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v18/apple_01.png" data-type="1" data-category="apple">
       <img class="place-option" style="max-width:100%; height:auto; object-fit:cover; cursor:pointer; filter: grayscale(100%)" draggable="false" src="https://www.google.com/logos/fnbx/snake_arcade/v18/apple_02.png" data-type="2" data-category="apple">
@@ -1235,8 +1235,12 @@ window.levelEditorMod.alterSnakeCode = function(code) {
     /([$a-zA-Z0-9_]{0,8})=function\(a\)\{a\.wa=1;if\([$a-zA-Z0-9_]{0,8}\(a\.settings\)\)/
   )[1];
   let [, tallyCountGameplayProperty, tallyCountMenuProperty] = code.assertMatch(
-    /[a-z]\.([$a-zA-Z0-9_]{0,8})=[a-z]\.([$a-zA-Z0-9_]{0,8});[a-z]\.yb=[a-z]\.Na;/
+    /[a-z]\.([$a-zA-Z0-9_]{0,8})=[a-z]\.([$a-zA-Z0-9_]{0,8});[a-z]\.yb=[a-z]\.[$a-zA-Z0-9_]{0,8};/
   );
+  // Yin-yang tally visibility flag (v12 Gh, v13 Lh)
+  let appleTallyVisibleProperty = code.assertMatch(
+    /sequenceNumber!==void 0&&\([a-z]\.([$a-zA-Z0-9_]{0,8})=[a-z]\.sequenceNumber%/
+  )[1];
 
   //globalThis.coordConstructor = swapInSnakeGlobal(code.assertMatch(/new (_\.[$a-zA-Z0-9_]{0,8})\(1,1\)/)[1]);
   globalThis.coordConstructor = code.assertMatch(/new (_\.[$a-zA-Z0-9_]{0,8})\(1,1\)/)[1];
@@ -1276,8 +1280,8 @@ window.levelEditorMod.alterSnakeCode = function(code) {
 
   // Speedrun mode: intercept level-clear win so challenge can auto-advance
   code = assertReplace(code,
-    /if\(odF\(this\)===0\)\{([$a-zA-Z0-9_]{0,8})\.WIN\.play\(\);this\.([$a-zA-Z0-9_]{0,8})=this\.([$a-zA-Z0-9_]{0,8})=!0;([$a-zA-Z0-9_]{0,8})\(this\.menu,1400,this\.Oh\);([\s\S]*?)this\.Mb=this\.ticks\}else if/,
-    'if(odF(this)===0){if(window.tryChallengeSpeedrunAdvance&&window.tryChallengeSpeedrunAdvance(this)){this.$2=this.$3=!0;}else{$1.WIN.play();this.$2=this.$3=!0;$4(this.menu,1400,this.Oh);$5this.Mb=this.ticks}}else if'
+    /if\(([$a-zA-Z0-9_]{0,8})\(this\)===0\)\{([$a-zA-Z0-9_]{0,8})\.WIN\.play\(\);this\.([$a-zA-Z0-9_]{0,8})=this\.([$a-zA-Z0-9_]{0,8})=!0;([$a-zA-Z0-9_]{0,8})\(this\.menu,1400,this\.([$a-zA-Z0-9_]{0,8})\);([\s\S]*?)this\.Mb=this\.ticks\}else if/,
+    'if($1(this)===0){if(window.tryChallengeSpeedrunAdvance&&window.tryChallengeSpeedrunAdvance(this)){this.$3=this.$4=!0;}else{$2.WIN.play();this.$3=this.$4=!0;$5(this.menu,1400,this.$6);$7this.Mb=this.ticks}}else if'
   );
 
   // Track where the board is drawn inside the main canvas (for accurate mouse placing).
@@ -1286,10 +1290,13 @@ window.levelEditorMod.alterSnakeCode = function(code) {
     /let ([$a-zA-Z0-9_]{0,8})=Math\.round\(\(this\.context\.canvas\.width-this\.[$a-zA-Z0-9_]{0,8}\.canvas\.width\)\/2\),([$a-zA-Z0-9_]{0,8})=Math\.round\(\(this\.context\.canvas\.height-this\.[$a-zA-Z0-9_]{0,8}\.canvas\.height\)\/\n?2\);/,
     '$&globalThis.leftBorderWidth=$1;globalThis.topBorderWidth=$2;'
   );
-  // Borderless: board is drawn at (Wd,$d) with a 2-tile content translate.
+  // Borderless: board is drawn at (drawX,drawY) plus the 2-tile content translate (Nd/he in v12, Pd/le in v13).
+  let [, borderlessBoardOffsetX, borderlessBoardOffsetY] = code.assertMatch(
+    /([$a-zA-Z0-9_]{0,8})=[$a-zA-Z0-9_]{0,8}\?-\(this\.wb\.ka\.Aa\.x\*this\.wb\.ka\.ka\)\/2:Math\.round\(this\.ka\.canvas\.width\/2-this\.wb\.oa\.[$a-zA-Z0-9_]{0,8}\.x-this\.wb\.ka\.ka\*2\),([$a-zA-Z0-9_]{0,8})=/
+  );
   code = assertReplace(code,
-    /let ([$a-zA-Z0-9_]{0,8})=([$a-zA-Z0-9_]{0,8})-([$a-zA-Z0-9_]{0,8}),(\$d)=([$a-zA-Z0-9_]{0,8})-([$a-zA-Z0-9_]{0,8});this\.context\.drawImage\(this\.[$a-zA-Z0-9_]{0,8}\.canvas,\1,\4\)/,
-    '$&;globalThis.leftBorderWidth=$1+Nd+2*this.wb.ka.ka;globalThis.topBorderWidth=$4+he+2*this.wb.ka.ka;'
+    /let ([$a-zA-Z0-9_]{0,8})=([$a-zA-Z0-9_]{0,8})-([$a-zA-Z0-9_]{0,8}),([$a-zA-Z0-9_]{0,8})=([$a-zA-Z0-9_]{0,8})-([$a-zA-Z0-9_]{0,8});this\.context\.drawImage\(this\.[$a-zA-Z0-9_]{0,8}\.canvas,\1,\4\)/,
+    `$&;globalThis.leftBorderWidth=$1+${borderlessBoardOffsetX}+2*this.wb.ka.ka;globalThis.topBorderWidth=$4+${borderlessBoardOffsetY}+2*this.wb.ka.ka;`
   );
 
   ///////////////////////////////////////
@@ -1336,7 +1343,7 @@ window.levelEditorMod.alterSnakeCode = function(code) {
     }
     // Match kaF's yin-yang visibility rule
     if(${modeCheck}(appleManager.settings, 11)) {
-      apple.Gh = apple.sequenceNumber % 2 === 1;
+      apple.${appleTallyVisibleProperty} = apple.sequenceNumber % 2 === 1;
     }
   };
 
@@ -1390,7 +1397,8 @@ window.levelEditorMod.alterSnakeCode = function(code) {
   }
   `, false);
 
-  let wallDetailsContainer = code.assertMatch(/[$a-zA-Z0-9_]{0,8}&&\([$a-zA-Z0-9_]{0,8}\(this\.([$a-zA-Z0-9_]{0,8}),\n?[$a-zA-Z0-9_]{0,8}\),\n?[$a-zA-Z0-9_]{0,8}\(this\.[$a-zA-Z0-9_]{0,8},7\)/)[1];
+  // Wall manager on the game object (v12 this.Ca, v13 a.Ca)
+  let wallDetailsContainer = code.assertMatch(/[$a-zA-Z0-9_]{0,8}\((?:this|[a-z])\.([$a-zA-Z0-9_]{0,8}),[a-z]\),[$a-zA-Z0-9_]{0,8}\((?:this|[a-z])\.[$a-zA-Z0-9_]{0,8},7\)/)[1];
 
   //Real wall placer object shape (not yinyang center/fake wall)
   let [,placeWallFunc,wallCoordProperty,wallSolidProperty,wallFakeProperty,wallAnimProperty] = code.assertMatch(
@@ -1448,7 +1456,7 @@ window.levelEditorMod.alterSnakeCode = function(code) {
 
   code = code.replace(funcWithPlaceWallOrig, funcWithPlaceWall);
 
-  let sokoDetailsContainer = code.assertMatch(/this\.([$a-zA-Z0-9_]{0,8})\.reset\(\);if\([$a-zA-Z0-9_]{0,8}\(this\.[$a-zA-Z0-9_]{0,8},8\)/)[1];
+  let sokoDetailsContainer = code.assertMatch(/this\.([$a-zA-Z0-9_]{0,8})\.reset\(\);\n?if\([$a-zA-Z0-9_]{0,8}\(this\.[$a-zA-Z0-9_]{0,8},8\)/)[1];
 
   //Setup for placing sokoban boxes
   let [, addSokoboxFunc, sokoPosition, sokoPrevProperty, sokoPlaySpawnAnimProperty, sokoLastProperty] = code.assertMatch(/([$a-zA-Z0-9_]{0,8})\([a-z],{([$a-zA-Z0-9_]{0,8}):[a-z],\n?([$a-zA-Z0-9_]{0,8}):null,([$a-zA-Z0-9_]{0,8}):!0,([$a-zA-Z0-9_]{0,8}):[a-z]}\)/);
