@@ -1207,6 +1207,9 @@ window.levelEditorMod.runCodeBefore = function() {
 ////////////////////////////////////////////////////////////////////
 
 window.levelEditorMod.alterSnakeCode = function(code) {
+  // Game v14 wraps snake.js lines at different spots than v13; patches here target one-line code.
+  // Only the first mod in a chain flattens (later mods' inserted code may rely on its own line breaks).
+  if (!window.__snakeV14Flattened) { window.__snakeV14Flattened = true; code = code.replace(/([\w$]?)\n(?!\/\/)(?=([\w$]?))/g, (m, a, b) => (a && b ? a + " " : a)); }
   code = code.replaceAll(/\$\$/gm, `aaaa`); //Prevent issues with $$ in variable names breaking stuff when replaced
 
   ///////////////////////////////////////
@@ -1280,8 +1283,8 @@ window.levelEditorMod.alterSnakeCode = function(code) {
 
   // Speedrun mode: intercept level-clear win so challenge can auto-advance
   code = assertReplace(code,
-    /if\(([$a-zA-Z0-9_]{0,8})\(this\)===0\)\{([$a-zA-Z0-9_]{0,8})\.WIN\.play\(\);this\.([$a-zA-Z0-9_]{0,8})=this\.([$a-zA-Z0-9_]{0,8})=!0;([$a-zA-Z0-9_]{0,8})\(this\.menu,1400,this\.([$a-zA-Z0-9_]{0,8})\);([\s\S]*?)this\.Mb=this\.ticks\}else if/,
-    'if($1(this)===0){if(window.tryChallengeSpeedrunAdvance&&window.tryChallengeSpeedrunAdvance(this)){this.$3=this.$4=!0;}else{$2.WIN.play();this.$3=this.$4=!0;$5(this.menu,1400,this.$6);$7this.Mb=this.ticks}}else if'
+    /if\(([$a-zA-Z0-9_]{0,8})\(this\)===0\)\{([$a-zA-Z0-9_]{0,8})\.WIN\.play\(\);this\.([$a-zA-Z0-9_]{0,8})=this\.([$a-zA-Z0-9_]{0,8})=!0;((?:[$a-zA-Z0-9_]{0,8}\(this\.header\);)?[$a-zA-Z0-9_]{0,8}\(this\.menu,1400,this\.[$a-zA-Z0-9_]{0,8}\);)([\s\S]*?)this\.wb=this\.ticks\}else if/,
+    'if($1(this)===0){if(window.tryChallengeSpeedrunAdvance&&window.tryChallengeSpeedrunAdvance(this)){this.$3=this.$4=!0;}else{$2.WIN.play();this.$3=this.$4=!0;$5$6this.wb=this.ticks}}else if'
   );
 
   // Track where the board is drawn inside the main canvas (for accurate mouse placing).
@@ -1292,11 +1295,11 @@ window.levelEditorMod.alterSnakeCode = function(code) {
   );
   // Borderless: board is drawn at (drawX,drawY) plus the 2-tile content translate (Nd/he in v12, Pd/le in v13).
   let [, borderlessBoardOffsetX, borderlessBoardOffsetY] = code.assertMatch(
-    /([$a-zA-Z0-9_]{0,8})=[$a-zA-Z0-9_]{0,8}\?-\(this\.wb\.ka\.Aa\.x\*this\.wb\.ka\.ka\)\/2:Math\.round\(this\.ka\.canvas\.width\/2-this\.wb\.oa\.[$a-zA-Z0-9_]{0,8}\.x-this\.wb\.ka\.ka\*2\),([$a-zA-Z0-9_]{0,8})=/
+    /([$a-zA-Z0-9_]{0,8})=[$a-zA-Z0-9_]{0,8}\?-\(this\.ub\.ka\.Aa\.x\*this\.ub\.ka\.ka\)\/2:Math\.round\(this\.ka\.canvas\.width\/2-this\.ub\.Yc\.[$a-zA-Z0-9_.]{0,16}\.x-this\.ub\.ka\.ka\*2\),([$a-zA-Z0-9_]{0,8})=/
   );
   code = assertReplace(code,
     /let ([$a-zA-Z0-9_]{0,8})=([$a-zA-Z0-9_]{0,8})-([$a-zA-Z0-9_]{0,8}),([$a-zA-Z0-9_]{0,8})=([$a-zA-Z0-9_]{0,8})-([$a-zA-Z0-9_]{0,8});this\.context\.drawImage\(this\.[$a-zA-Z0-9_]{0,8}\.canvas,\1,\4\)/,
-    `$&;globalThis.leftBorderWidth=$1+${borderlessBoardOffsetX}+2*this.wb.ka.ka;globalThis.topBorderWidth=$4+${borderlessBoardOffsetY}+2*this.wb.ka.ka;`
+    `$&;globalThis.leftBorderWidth=$1+${borderlessBoardOffsetX}+2*this.ub.ka.ka;globalThis.topBorderWidth=$4+${borderlessBoardOffsetY}+2*this.ub.ka.ka;`
   );
 
   ///////////////////////////////////////
@@ -1525,12 +1528,10 @@ window.levelEditorMod.alterSnakeCode = function(code) {
   globalThis.changeSettingFuncName = /[$a-zA-Z0-9_]{0,8}/.exec(funcWithChangeSetting)[0];
 
   //Menu property - same regex as below
-  let menuProperty = code.assertMatch(/if\(this\.([$a-zA-Z0-9_]{0,8})\.isVisible\(\)\|\|this\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}\)/)[1];
+  let menuProperty = code.assertMatch(/if\(![a-z]\.([$a-zA-Z0-9_]{0,8})\.isVisible\(\)&&![a-z]\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}\)return!1;/)[1];
 
   //Func used to do a full reset (class method form in v12)
-  let funcWithFullReset = findFunctionInCode(code, /[$a-zA-Z0-9_]{0,8}\(\)\{$/,
-  /isVisible\(\)\|\|this\.[$a-zA-Z0-9_]{0,8}\.[$a-zA-Z0-9_]{0,8}\)\{if\(this\.settings\./,
-  false);
+  let funcWithFullReset = code.assertMatch(/([$a-zA-Z0-9_]{1,8})\(\)\{([$a-zA-Z0-9_]{1,8})\(this,!1\)\}[$a-zA-Z0-9_]{1,8}\(\)\{\2\(this,!0\)&&this\.[$a-zA-Z0-9_]{1,8}\.start\(\)\}/)[0];
 
   //Just need the name of this function so we can call it.
   globalThis.fullResetFuncName = /[$a-zA-Z0-9_]{0,8}/.exec(funcWithFullReset)[0];
